@@ -60,7 +60,7 @@
                         <div class="navbar nav_title" style="border: 0;">
                             <a class="site_title" runat="server" href="~/">
                             <i class="fa fa-gears"></i>
-                            <span style="height: 25%; /*font-size: 9.1pt;*/">Project Tracking</span>
+                            <span style="height: 25%; font-size: 9.1pt;">Biostatistics Project Tracking</span>
                             </a>
                         </div>
 

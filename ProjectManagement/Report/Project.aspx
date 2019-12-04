@@ -107,7 +107,7 @@
                     </asp:DropDownList>
                 </div>
             </div>
-            <div class="row offset2">
+            <%--<div class="row offset2">
                 <div class="col-md-1 text-right">
                     <label class="control-label">Core:</label>
                 </div>
@@ -129,7 +129,7 @@
                 <div class="col-md-1 offset2">
                     <asp:CheckBox ID="chkCreditToBoth" runat="server" Text="Both"></asp:CheckBox>
                 </div>
-            </div>
+            </div>--%>
             <div class="row offset2">
                 <div class="col-md-1 text-right">
                     <label class="control-label">PI Name:</label>

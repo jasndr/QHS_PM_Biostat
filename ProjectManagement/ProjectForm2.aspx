@@ -115,12 +115,12 @@
                                 </asp:DropDownList>
                             </div>
 
-                            <div class="col-sm-1 offset1">
+                            <%--<div class="col-sm-1 offset1">
                                 <asp:CheckBox ID="chkBiostat" runat="server" Text="Biostat"></asp:CheckBox>
                             </div>
                             <div class="col-sm-1 offset1">
                                 <asp:CheckBox ID="chkBioinfo" runat="server" Text="Bioinfo"></asp:CheckBox>
-                            </div>
+                            </div>--%>
                         </div>
                         <br />
                         <div class="row">
@@ -481,7 +481,7 @@
                             </div>
                         </div>
                         <br />
-                        <h5>Credit To</h5>
+                        <%--<h5>Credit To</h5>
                         <div class="row">
                             <div class="col-sm-6 text-left">
                                 <label class="control-label">Credit to sister cores</label>
@@ -497,7 +497,7 @@
                             <div class="col-sm-2">
                                 <asp:CheckBox ID="chkCreditToBoth" runat="server" Text="Biostat and Bioinfo"></asp:CheckBox>
                             </div>
-                        </div>
+                        </div>--%>
 
                         <h5>Other Description</h5>
                         <br />

@@ -42,6 +42,7 @@ namespace ProjectManagement.Report
     ///                                    of support reference in new project form.
     ///  2019MAY10 - Jason Delos Reyes  -  Created "Rpt_Project_Summary2a" to be able to pull projects that have 
     ///                                    "Submitted to RMATRIX" and "Submitted to Ola HAWAII" checked.
+    ///  2019DEC03 - Jason Delos Reyes  -  Removed "core (project type)" and "credit to" as not necessary for database separation.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -234,20 +235,20 @@ namespace ProjectManagement.Report
 
             letterOfSupport = chkLetterOfSupport.Checked ? 1 : 0;
 
-            if ((chkBiostat.Checked && chkBioinfo.Checked) || (!chkBiostat.Checked && !chkBioinfo.Checked))
-                isBiostat = -1;
-            else
-            {
-                isBiostat = chkBiostat.Checked ? 1 : 2;
-            }
+            //if ((chkBiostat.Checked && chkBioinfo.Checked) || (!chkBiostat.Checked && !chkBioinfo.Checked))
+            //    isBiostat = -1;
+            //else
+            //{
+            //    isBiostat = chkBiostat.Checked ? 1 : 2;
+            //}
 
 
-            if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
-                creditTo = -1;
-            else
-            {
-                creditTo = chkCreditToBoth.Checked ? 3 : chkCreditToBioinfo.Checked ? 2 : 1;
-            }
+            //if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
+            //    creditTo = -1;
+            //else
+            //{
+            //    creditTo = chkCreditToBoth.Checked ? 3 : chkCreditToBioinfo.Checked ? 2 : 1;
+            //}
 
             DateTime fromDate = DateTime.TryParse(txtFromDate.Text, out fromDate) ? DateTime.Parse(txtFromDate.Text)
                                                                                   : new DateTime(2000, 01, 01);

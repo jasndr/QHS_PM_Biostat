@@ -48,7 +48,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-1">
-                        Biostats:  
+                        Faculty/staff:  
                     </div>
                     <div class="col-md-5">
                         <asp:DropDownList ID="ddlBiostat" runat="server" CssClass="form-control">

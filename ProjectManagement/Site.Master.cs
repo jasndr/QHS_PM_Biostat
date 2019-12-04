@@ -28,6 +28,7 @@ namespace ProjectManagement
     ///                                    easily be expanded to more grants.
     ///  2019APR26 - Jason Delos Reyes  -  Replace sole "RMATRIX Monthly Report" link to a more inclusive "RMATRIX / Ola HAWAII Monthly Report"
     ///                                    tab to allow pulling Ola HAWAII reports for now, and possibly expand to other grants in the future.
+    ///  2019DEC03 - Jason Delos Reyes  -  Changed text to conform to Biostatistics Project Tracking separation.
     /// </summary>
     public partial class SiteMaster : MasterPage
     {

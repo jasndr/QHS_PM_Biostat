@@ -119,6 +119,7 @@ namespace ProjectManagement
     ///                                    to correspond to this change.
     ///  2019SEP10 - Jason Delos Reyes  -  Fixed "Year/Call/Wave" display issue not separating upon reading from database.
     ///  2019NOV13 - Jason Delos Reyes  -  Fixed "Year/Call/Wave" box appearing despite Ola HAWAII Request Type (Pilot, R21, R01, Other) not selected.
+    ///  2019DEC03 - Jason Delos Reyes  -  Removed "project type" and "credit to" as it is no longer required for individual core facility.
     /// </summary>
     public partial class ProjectForm2 : System.Web.UI.Page
     {
@@ -565,15 +566,15 @@ namespace ProjectManagement
                 }
             }
 
-            if (!chkBiostat.Checked && !chkBioinfo.Checked)
-            {
-                validateResult.Append("Please indicate if this is a Biostat or Bioinfo project. \\n");
-            }
+            //if (!chkBiostat.Checked && !chkBioinfo.Checked)
+            //{
+            //    validateResult.Append("Please indicate if this is a Biostat or Bioinfo project. \\n");
+            //}
 
-            if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
-            {
-                validateResult.Append("Please indicate \"Credit To\" field. \\n");
-            }
+            //if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
+            //{
+            //    validateResult.Append("Please indicate \"Credit To\" field. \\n");
+            //}
 
             int grantBitSum = 0;
             Int32.TryParse(txtGrantBitSum.Value, out grantBitSum);
@@ -1093,12 +1094,12 @@ namespace ProjectManagement
             else
                 chkApproved.Disabled = false;
 
-            chkBiostat.Checked = project.ProjectType == (byte)ProjectType.Biostat;
-            chkBioinfo.Checked = project.ProjectType == (byte)ProjectType.Bioinfo;
+            //chkBiostat.Checked = project.ProjectType == (byte)ProjectType.Biostat;
+            //chkBioinfo.Checked = project.ProjectType == (byte)ProjectType.Bioinfo;
 
-            chkCreditToBiostat.Checked = project.CreditTo == (byte)ProjectType.Biostat;
-            chkCreditToBioinfo.Checked = project.CreditTo == (byte)ProjectType.Bioinfo;
-            chkCreditToBoth.Checked = project.CreditTo == (byte)ProjectType.Both;
+            //chkCreditToBiostat.Checked = project.CreditTo == (byte)ProjectType.Biostat;
+            //chkCreditToBioinfo.Checked = project.CreditTo == (byte)ProjectType.Bioinfo;
+            //chkCreditToBoth.Checked = project.CreditTo == (byte)ProjectType.Both;
         }
 
         /// <summary>
@@ -1714,8 +1715,8 @@ namespace ProjectManagement
                 IsApproved = chkApproved.Checked,
                 Creator = User.Identity.Name,
                 CreationDate = DateTime.Now,
-                ProjectType = chkBiostat.Checked ? (byte)ProjectType.Biostat : chkBioinfo.Checked ? (byte)ProjectType.Bioinfo : (byte)0, // if biostat is checked, then biostat, otherwise bioinfo (or 0 if unchecked).
-                CreditTo = chkCreditToBiostat.Checked ? (byte)ProjectType.Biostat : chkCreditToBioinfo.Checked ? (byte)ProjectType.Bioinfo : chkCreditToBoth.Checked ? (byte)ProjectType.Both : (byte)0 // if biostat is checked, then biostat; otherwise if bioinfo is checked, then bioinfo; otherwise if 'both', then both, otherwise nothing is checked (value of 0)
+                //ProjectType = chkBiostat.Checked ? (byte)ProjectType.Biostat : chkBioinfo.Checked ? (byte)ProjectType.Bioinfo : (byte)0, // if biostat is checked, then biostat, otherwise bioinfo (or 0 if unchecked).
+                //CreditTo = chkCreditToBiostat.Checked ? (byte)ProjectType.Biostat : chkCreditToBioinfo.Checked ? (byte)ProjectType.Bioinfo : chkCreditToBoth.Checked ? (byte)ProjectType.Both : (byte)0 // if biostat is checked, then biostat; otherwise if bioinfo is checked, then bioinfo; otherwise if 'both', then both, otherwise nothing is checked (value of 0)
             };
 
             return project;

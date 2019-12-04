@@ -39,6 +39,7 @@ namespace ProjectManagement.Report
     ///                                    that have supported the paper (in contrast to just acknowledgement).
     ///                                 -  Made changes to Rpt_Paper2a stored procedure to make "Not Accepted" papers
     ///                                    appear in the query.
+    ///  2019DEC03 - Jason Delos Reyes  -  Changed "Biostats" to "Faculty/staff".
     /// </summary>
     public partial class AdhocReport : System.Web.UI.Page
     {
