@@ -1,17 +1,14 @@
 # QHS_PM_Biostat 
-   **Quantitative Health Sciences (QHS) Project Tracking System**
+   **JABSOM Biostatistics Core Facility, Department of Quantitative Health Sciences (DQHS) Project Tracking System**
 
 >- Created by Yang Rui, Managed by Jason Delos Reyes & Munirih Taʻafaki
 
->- All content owned and managed by the Department of Quantitative Health Sciences, 
+>- All content owned and managed by the JABSOM Biostatistics Cor Facilitye, Department of Quantitative Health Sciences, 
    University of Hawaiʻi John A. Burns School of Medicine.  For questions or concerns, please contact qhs@hawaii.edu.
 
 ## Description
 A project tracking system that keeps tracks of the projects and activities have been and are being completed within 
-the Biostatistics and Bioinformatics Core (as Quantitative Health Sciences) of the John A. Burns School of Medicine's
-Department of Quantitative Health Sciences.  This system is useful in creating reports that have been tracked
-through this system.  Only front-end code without sensitive information has been published into GitHub (i.e., sensitive
-information is only stored in a database in a secure location).  Please contact
+the JABSOM Biostatistics Core Facility,  of the Department of Quantitative Health Sciences.  This system is useful in creating reports that have been tracked through this system.  Only front-end code without sensitive information has been published into GitHub (i.e., sensitive information is only stored in a database in a secure location).  Please contact
 qhs@hawaii.edu for permission on using the front-end code for personal and/or commercial use.
 
 - Created with Visual Studio 2015.
