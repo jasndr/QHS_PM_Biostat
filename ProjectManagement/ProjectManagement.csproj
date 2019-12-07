@@ -561,9 +561,6 @@
     <Content Include="ClientRequestTracker.edmx.diagram">
       <DependentUpon>ClientRequestTracker.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\DB_Bioinfo - External.pubxml" />
-    <None Include="Properties\PublishProfiles\DB_Bioinfo.pubxml" />
-    <None Include="Properties\PublishProfiles\DEV_Bioinfo.pubxml" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -785,9 +782,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\PublishProfiles\DEV.pubxml" />
-    <None Include="Properties\PublishProfiles\PM - External.pubxml" />
-    <None Include="Properties\PublishProfiles\PM.pubxml" />
     <Content Include="PubHistory.aspx" />
     <Content Include="Publication.aspx" />
     <Content Include="Report\AdhocReport.aspx" />

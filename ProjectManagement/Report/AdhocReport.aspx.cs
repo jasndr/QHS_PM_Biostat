@@ -40,6 +40,8 @@ namespace ProjectManagement.Report
     ///                                 -  Made changes to Rpt_Paper2a stored procedure to make "Not Accepted" papers
     ///                                    appear in the query.
     ///  2019DEC03 - Jason Delos Reyes  -  Changed "Biostats" to "Faculty/staff".
+    ///  2019DEC06 - Jason Delos Reyes  -  Changed the "Faculty/staff" to be ordered by current members first, 
+    ///                                    then followed by former members, as well as eliminating 'N/A' and 'unknown' options.
     /// </summary>
     public partial class AdhocReport : System.Web.UI.Page
     {
@@ -122,7 +124,9 @@ namespace ProjectManagement.Report
                 //    }
                 //}
                 dropDownSource = context.BioStats
-                                    .OrderBy(b => b.Name)
+                                    .Where(b=>b.Name != "N/A" && b.Name != "Unknown")
+                                    .OrderByDescending(b=>b.EndDate)
+                                    .ThenBy(b => b.Name)
                                     .ToDictionary(c => c.Id, c => c.Name);
 
                 PageUtility.BindDropDownList(ddlBiostat, dropDownSource, "--- Select All ---");

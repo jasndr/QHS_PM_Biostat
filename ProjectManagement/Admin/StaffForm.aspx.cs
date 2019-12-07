@@ -30,6 +30,10 @@ namespace ProjectManagement.Admin
     ///                                 -  Removed "user rights" checkboxes for faculty/staff without tracking system accounts.
     ///  2018NOV27 - Jason Delos Reyes  -  Enabled "user rights" feature to add/remove user rights privileges on Admin/Staff page.
     ///  2019APR03 - Jason Delos Reyes  -  Fixed "edit" feature with missing accounts.
+    ///  2019DEC05 - Jason Delos Reyes  -  Added ability to split current and former Biostatistics faculty/staff into two lists
+    ///                                    on the staff page for easier management.
+    ///  2019DEC06 - Jason Delos Reyes  -  Added ability for "super user" to automatically add faculty/staff via the
+    ///                                    Admin/Staff page.
     ///  </summary>
     public partial class StaffForm : System.Web.UI.Page
     {
@@ -60,7 +64,13 @@ namespace ProjectManagement.Admin
                     var query = context.BioStats
                            .OrderBy(d => d.Id);
 
-                    GridView1.DataSource = query.ToList();
+                    var current = query.Where(d => d.EndDate >= DateTime.Today && d.Id != 99);
+
+                    GridView1.DataSource = current.ToList();
+
+                    var former = query.Where(d => d.EndDate < DateTime.Today);
+
+                    GridView2.DataSource = former.ToList();
 
                     /// Populates "User Rights" checkbox grid in Admin/StaffForm page.
                     var qUserRights = context.AspNetRoles.OrderBy(x => ((x.Name == "Super") ? 1 :
@@ -69,13 +79,17 @@ namespace ProjectManagement.Admin
 
                     GridView1.DataBind();
 
+                    GridView2.DataBind();
 
 
                 }
                 else
                 {
+
+                    /// [GridView1 (Current)] \\\
                     var obj = new List<Invests>();
                     obj.Add(new Invests());
+
                     // Bind the DataTable which contain a blank row to the GridView
                     GridView1.DataSource = obj;
                     GridView1.DataBind();
@@ -90,24 +104,75 @@ namespace ProjectManagement.Admin
                     GridView1.Rows[0].Cells[0].Font.Bold = true;
                     //set No Results found to the new added cell
                     GridView1.Rows[0].Cells[0].Text = "NO RESULT FOUND!";
+
+                    /// [GridView2 (Former)] \\\
+                    var obj2 = new List<Invests>();
+                    obj2.Add(new Invests());
+
+                    //// Bind the DataTable which contain a blank row to the GridView
+                    GridView2.DataSource = obj2;
+                    GridView2.DataBind();
+                    int columnsCount2 = GridView1.Columns.Count;
+                    GridView2.Rows[0].Cells.Clear();// clear all the cells in the row
+                    GridView2.Rows[0].Cells.Add(new TableCell()); //add a new blank cell
+                    GridView2.Rows[0].Cells[0].ColumnSpan = columnsCount; //set the column span to the new added cell
+
+                    //You can set the styles here
+                    GridView2.Rows[0].Cells[0].HorizontalAlign = HorizontalAlign.Center;
+                    GridView2.Rows[0].Cells[0].ForeColor = System.Drawing.Color.Red;
+                    GridView2.Rows[0].Cells[0].Font.Bold = true;
+                    //set No Results found to the new added cell
+                    GridView2.Rows[0].Cells[0].Text = "NO RESULT FOUND!";
                 }
             }
         }
 
+        
+
         /// <summary>
         /// For adding new entries, if the current user is a super user (that has access to 
-        /// "Admin" tab on tracking system), a new QHS faculty/staff member is added 
+        /// "Admin" tab on tracking system), a new QHS faculty/staff member can be added 
         /// to the "Biostat" table.
+        /// 
+        /// [GridView1 - Current staff]
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            RowCommand(GridView1, sender, e);
+        }
+
+        /// <summary>
+        /// For adding new entries, if the current user is a super user (that has access to 
+        /// "Admin" tab on tracking system), a new QHS faculty/staff member can be added 
+        /// to the "Biostat" table.
+        /// 
+        /// [GridView2 - Former staff]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GridView2_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            RowCommand(GridView2, sender, e);
+        }
+
+        /// <summary>
+        /// For adding new entries, if the current user is a super user (that has access to 
+        /// "Admin" tab on tracking system), a new QHS faculty/staff member can be added 
+        /// to the "Biostat" table.
+        /// 
+        /// [General]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void RowCommand(GridView gridview, object sender, GridViewCommandEventArgs e)
+        {
             if (Page.User.IsInRole("Super"))
             {
                 if (e.CommandName == "InsertNew")
                 {
-                    GridViewRow row = GridView1.FooterRow;
+                    GridViewRow row = gridview.FooterRow;
 
                     TextBox txtName = row.FindControl("txtNameNew") as TextBox;
                     TextBox txtType = row.FindControl("txtTypeNew") as TextBox;
@@ -120,28 +185,33 @@ namespace ProjectManagement.Admin
                         using (ProjectTrackerContainer context = new ProjectTrackerContainer())
                         {
                             int largestId = context.BioStats.OrderByDescending(b => b.Id).FirstOrDefault(g => g.Id != 99).Id + 1;
+                 
 
-                            BioStat biostat = new BioStat()
+                            using (var transaction = context.Database.BeginTransaction())
                             {
-                                //Id = largestId, // <- Ignored by the system!!!
-                                Name = txtName.Text,
-                                Type = txtType.Text,
-                                Email = txtEmail.Text,
-                                LogonId = txtLogonId.Text,
-                                EndDate = DateTime.Parse(txtEndDate.Text),
-                                //BitValue = (long)Math.Pow(2, largestId) // <- To be added once Id can be inserted via Identity Insert
+                                BioStat biostat = new BioStat()
+                                {
+                                    Id = largestId,
+                                    Name = txtName.Text,
+                                    Type = txtType.Text,
+                                    Email = txtEmail.Text,
+                                    LogonId = txtLogonId.Text,
+                                    EndDate = DateTime.Parse(txtEndDate.Text),
+                                    BitValue = (long)Math.Pow(2, largestId)
+                                };
 
-                            };
+                                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT BioStats ON");
 
-                            //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT BioStats ON");
+                                context.BioStats.Add(biostat);
+                                WriteInvest(context, biostat);
+                                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT BioStats OFF");
 
-                            context.BioStats.Add(biostat);
+                                transaction.Commit();
 
-                            //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT BioStats OFF");
 
-                            WriteInvest(context, biostat);
+                            }
 
-                            BindGrid();
+                                BindGrid();
                         }
                     }
                 }
@@ -150,12 +220,38 @@ namespace ProjectManagement.Admin
 
         /// <summary>
         /// Allows row to be edited upon clicking edit button.
+        /// 
+        /// [GridView1 - Current staff]
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            GridView1.EditIndex = e.NewEditIndex;
+            RowEditing(GridView1, sender, e);
+        }
+
+        /// <summary>
+        /// Allows row to be edited upon clicking edit button.
+        /// 
+        /// [GridView2 - Former staff]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GridView2_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            RowEditing(GridView2, sender, e);
+        }
+
+        /// <summary>
+        /// Allows row to be edited upon clicking edit button.
+        /// 
+        /// [General]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void RowEditing(GridView gridview, object sender, GridViewEditEventArgs e)
+        {
+            gridview.EditIndex = e.NewEditIndex;
 
 
             //------------------------------------
@@ -169,15 +265,15 @@ namespace ProjectManagement.Admin
 
 
 
-                Repeater rptUserRights = (Repeater)GridView1.Rows[e.NewEditIndex].FindControl("rptUserRights");
+                Repeater rptUserRights = (Repeater)gridview.Rows[e.NewEditIndex].FindControl("rptUserRights");
                 if (rptUserRights != null)
                 {
                     rptUserRights.DataSource = qUserRights;
                     rptUserRights.DataBind();
 
-                    Label lblUserName = (Label)GridView1.Rows[e.NewEditIndex].FindControl("lblLogonId");
+                    Label lblUserName = (Label)gridview.Rows[e.NewEditIndex].FindControl("lblLogonId");
 
-                    
+
                     string userName = lblUserName.Text;
 
                     // Check if Biostat is registered user.
@@ -231,6 +327,8 @@ namespace ProjectManagement.Admin
 
         /// <summary>
         /// Prevents updating the table grid row if items are canceled and refreshes the grid.
+        /// 
+        /// [GridView1 - Current staff]
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -241,16 +339,57 @@ namespace ProjectManagement.Admin
         }
 
         /// <summary>
-        /// Upon updates the Biostat table in the database based on the
+        /// Prevents updating the table grid row if items are canceled and refreshes the grid.
+        /// 
+        /// [GridView2 - Former staff]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GridView2_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridView2.EditIndex = -1;
+            BindGrid();
+        }
+
+        /// <summary>
+        /// Updates the Biostat table in the database based on the
         /// values used in the tracking system.
+        /// 
+        /// [GridView1 - Current staff]
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void GridView1_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
+            RowUpdating(GridView1, sender, e);
+        }
+
+        /// <summary>
+        /// Updates the Biostat table in the database based on the
+        /// values used in the tracking system.
+        /// 
+        /// [GridView2 - Former staff]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GridView2_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            RowUpdating(GridView2, sender, e);
+        }
+
+        /// <summary>
+        /// Updates the Biostat table in the database based on the
+        /// values used in the tracking system.
+        /// 
+        /// [General]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void RowUpdating(GridView gridview, object sender, GridViewUpdateEventArgs e)
+        {
             if (Page.User.IsInRole("Super"))
             {
-                GridViewRow row = GridView1.Rows[e.RowIndex];
+                GridViewRow row = gridview.Rows[e.RowIndex];
 
                 Label lblId = row.FindControl("lblId") as Label;
                 TextBox txtName = row.FindControl("txtName") as TextBox;
@@ -302,7 +441,8 @@ namespace ProjectManagement.Admin
                                     var currRights = checkbox.Text;
                                     bool markedRights = checkbox.Checked == true ? true : false;
 
-                                    /*AspNetUser */biostatUserAcct = context.AspNetUsers.First(x => x.UserName == biostat.LogonId);
+                                    /*AspNetUser */
+                                    biostatUserAcct = context.AspNetUsers.First(x => x.UserName == biostat.LogonId);
                                     AspNetRole currAcctRole = context.AspNetRoles.First(x => x.Name == currRights);
 
                                     if (markedRights)
@@ -353,7 +493,7 @@ namespace ProjectManagement.Admin
 
                         WriteInvest(context, biostat);
 
-                        GridView1.EditIndex = -1;
+                        gridview.EditIndex = -1;
                         BindGrid();
 
                     }
@@ -363,10 +503,36 @@ namespace ProjectManagement.Admin
 
         /// <summary>
         /// Prepares row data (only need user rights checkboxes for now).
+        /// 
+        /// [GridView1 - Current staff]
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            RowDataBound(sender, e);
+        }
+
+        /// <summary>
+        /// Prepares row data (only need user rights checkboxes for now).
+        /// 
+        /// [GridView2 - Former staff]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GridView2_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            RowDataBound(sender, e);
+        }
+
+        /// <summary>
+        /// Prepares row data (only need user rights checkboxes for now).
+        /// 
+        /// [General]
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void RowDataBound(object sender, GridViewRowEventArgs e)
         {
 
             using (ProjectTrackerContainer context = new ProjectTrackerContainer())
@@ -386,7 +552,7 @@ namespace ProjectManagement.Admin
                     Label lblUserName = (Label)e.Row.FindControl("lblLogonId");
                     TextBox txtUserName = (TextBox)e.Row.FindControl("txtLogonId");
                     string userName = lblUserName != null ? lblUserName.Text : txtUserName != null ? txtUserName.Text : "";
-                    
+
 
                     // Check if Biostat is registered user.
                     var listRgstdUsers = context.AspNetUsers.Select(x => x.UserName).ToList();
@@ -436,15 +602,15 @@ namespace ProjectManagement.Admin
                             rptUserRights.Visible = false;
                         }
 
-                        
+
 
                     }
                     else
                     {
                         e.Row.Cells[7].BackColor = Color.IndianRed;
                     }
-                    
-                    
+
+
                 }
 
             }
