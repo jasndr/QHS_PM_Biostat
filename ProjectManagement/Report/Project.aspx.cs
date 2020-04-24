@@ -45,6 +45,8 @@ namespace ProjectManagement.Report
     ///  2019DEC03 - Jason Delos Reyes  -  Removed "core (project type)" and "credit to" as not necessary for database separation.
     ///  2020MAR17 - Jason Delos Reyes  -  Made "isBiostat" and "CreditTo" default to -1 as this interface (Biostatistics PT) is 
     ///                                    separate from Bioinformatics PT and we want to pull all projects. 
+    ///  2020APR23 - Jason Delos Reyes  -  Edited "Master" dropdown to also pull other MS and below QHS faculty/staff 
+    ///                                    that doesn't necessarily have the label "master" as biostat type.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -65,7 +67,7 @@ namespace ProjectManagement.Report
                 {
                     var dropDownSource = new Dictionary<int, string>();
 
-                    var query = dbContext.BioStats.Where(b => b.Id > 0);
+                    var query = dbContext.BioStats.Where(b => b.Id > 0 && b.Id != 99);
 
                     dropDownSource = query
                                     .Where(b => b.Type == "phd")
@@ -76,7 +78,7 @@ namespace ProjectManagement.Report
                     PageUtility.BindDropDownList(ddlPhd, dropDownSource, " --- Select --- ");
 
                     dropDownSource = query
-                                    .Where(b => b.Type == "master")
+                                    .Where(b => b.Type != "phd")
                                     .OrderByDescending(b => b.EndDate)
                                     .ThenBy(b => b.Name)
                                     .ToDictionary(b => b.Id, b => b.Name);
