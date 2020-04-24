@@ -43,6 +43,8 @@ namespace ProjectManagement.Report
     ///  2019MAY10 - Jason Delos Reyes  -  Created "Rpt_Project_Summary2a" to be able to pull projects that have 
     ///                                    "Submitted to RMATRIX" and "Submitted to Ola HAWAII" checked.
     ///  2019DEC03 - Jason Delos Reyes  -  Removed "core (project type)" and "credit to" as not necessary for database separation.
+    ///  2020APR23 - Jason Delos Reyes  -  Edited "master" dropdown list to also pull QHS faculty/staff that don't necessarily
+    ///                                    have a "master" degree type.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -63,7 +65,7 @@ namespace ProjectManagement.Report
                 {
                     var dropDownSource = new Dictionary<int, string>();
 
-                    var query = dbContext.BioStats.Where(b => b.Id > 0);
+                    var query = dbContext.BioStats.Where(b => b.Id > 0 && b.Id != 99);
 
                     dropDownSource = query
                                     .Where(b => b.Type == "phd")
@@ -74,7 +76,7 @@ namespace ProjectManagement.Report
                     PageUtility.BindDropDownList(ddlPhd, dropDownSource, " --- Select --- ");
 
                     dropDownSource = query
-                                    .Where(b => b.Type == "master")
+                                    .Where(b => b.Type != "phd")
                                     .OrderByDescending(b => b.EndDate)
                                     .ThenBy(b => b.Name)
                                     .ToDictionary(b => b.Id, b => b.Name);
