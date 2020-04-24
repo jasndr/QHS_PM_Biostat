@@ -43,8 +43,8 @@ namespace ProjectManagement.Report
     ///  2019MAY10 - Jason Delos Reyes  -  Created "Rpt_Project_Summary2a" to be able to pull projects that have 
     ///                                    "Submitted to RMATRIX" and "Submitted to Ola HAWAII" checked.
     ///  2019DEC03 - Jason Delos Reyes  -  Removed "core (project type)" and "credit to" as not necessary for database separation.
-    ///  2020APR23 - Jason Delos Reyes  -  Edited "master" dropdown list to also pull QHS faculty/staff that don't necessarily
-    ///                                    have a "master" degree type.
+    ///  2020MAR17 - Jason Delos Reyes  -  Made "isBiostat" and "CreditTo" default to -1 as this interface (Biostatistics PT) is 
+    ///                                    separate from Bioinformatics PT and we want to pull all projects. 
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -65,7 +65,7 @@ namespace ProjectManagement.Report
                 {
                     var dropDownSource = new Dictionary<int, string>();
 
-                    var query = dbContext.BioStats.Where(b => b.Id > 0 && b.Id != 99);
+                    var query = dbContext.BioStats.Where(b => b.Id > 0);
 
                     dropDownSource = query
                                     .Where(b => b.Type == "phd")
@@ -76,7 +76,7 @@ namespace ProjectManagement.Report
                     PageUtility.BindDropDownList(ddlPhd, dropDownSource, " --- Select --- ");
 
                     dropDownSource = query
-                                    .Where(b => b.Type != "phd")
+                                    .Where(b => b.Type == "master")
                                     .OrderByDescending(b => b.EndDate)
                                     .ThenBy(b => b.Name)
                                     .ToDictionary(b => b.Id, b => b.Name);
@@ -216,7 +216,7 @@ namespace ProjectManagement.Report
 
             Int32.TryParse(ddlPIStatus.SelectedValue, out piStatusId);
 
-            int phdId = 0, msId = 0, healthValue = 0, grantValue = 0, isProject = 1, isBiostat = 1, creditTo = 1,
+            int phdId = 0, msId = 0, healthValue = 0, grantValue = 0, isProject = 1, isBiostat = -1, creditTo = -1,
                 isRmatrixRequest = 0, isOlaRequest = 0, submitRMATRIX = 1, submitOlaHAWAII = 1, letterOfSupport = 0;
 
             Int32.TryParse(ddlPhd.SelectedValue, out phdId);
