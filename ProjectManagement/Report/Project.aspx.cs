@@ -42,11 +42,10 @@ namespace ProjectManagement.Report
     ///                                    of support reference in new project form.
     ///  2019MAY10 - Jason Delos Reyes  -  Created "Rpt_Project_Summary2a" to be able to pull projects that have 
     ///                                    "Submitted to RMATRIX" and "Submitted to Ola HAWAII" checked.
-    ///  2019DEC03 - Jason Delos Reyes  -  Removed "core (project type)" and "credit to" as not necessary for database separation.
-    ///  2020MAR17 - Jason Delos Reyes  -  Made "isBiostat" and "CreditTo" default to -1 as this interface (Biostatistics PT) is 
-    ///                                    separate from Bioinformatics PT and we want to pull all projects. 
     ///  2020APR23 - Jason Delos Reyes  -  Edited "Master" dropdown to also pull other MS and below QHS faculty/staff 
     ///                                    that doesn't necessarily have the label "master" as biostat type.
+    ///  2020APR27 - Jason Delos Reyes  -  Added customized "Check-in Summary" report for Project report to 
+    ///                                    be able to better facilitate work-from-home check-in summary sessions.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -73,7 +72,7 @@ namespace ProjectManagement.Report
                                     .Where(b => b.Type == "phd")
                                     .OrderByDescending(b => b.EndDate)
                                     .ThenBy(b => b.Name)
-                                    .ToDictionary(b => b.Id, b => b.Name );
+                                    .ToDictionary(b => b.Id, b => b.Name);
 
                     PageUtility.BindDropDownList(ddlPhd, dropDownSource, " --- Select --- ");
 
@@ -114,12 +113,21 @@ namespace ProjectManagement.Report
 
                     var piName = dbContext.Invests
                         .Where(i => i.Id > 0)
-                        .Select(x => new {Id = x.Id, Name = x.FirstName +" " + x.LastName});
+                        .Select(x => new { Id = x.Id, Name = x.FirstName + " " + x.LastName });
 
                     textAreaPI.Value = Newtonsoft.Json.JsonConvert.SerializeObject(piName);
+
+                    Dictionary<int, string> reportType = new Dictionary<int, string>();
+                    reportType.Add(1, "Check-in Meeting Report");
+
+                    PageUtility.BindDropDownList(ddlReportType, reportType, "Full Report");
+
+
+
+
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -129,14 +137,30 @@ namespace ProjectManagement.Report
         /// <param name="e"></param>
         protected void btnSumbit_Click(object sender, EventArgs e)
         {
-            divProject.Visible = true;
+            if (ddlReportType.SelectedIndex.Equals(1))
+            {
+                divProject2.Visible = true;
 
-            DataTable dt = GetProjectTable();
+                DataTable dt = GetProjectTable();
 
-            rptProjectSummary.DataSource = dt;
-            rptProjectSummary.DataBind();
+                rptProjectSummary2.DataSource = dt;
+                rptProjectSummary2.DataBind();
 
-            hdnRowCount.Value = dt.Rows.Count.ToString();
+                hdnRowCount.Value = dt.Rows.Count.ToString();
+            }
+            else
+            {
+                divProject.Visible = true;
+
+                DataTable dt = GetProjectTable();
+
+                rptProjectSummary.DataSource = dt;
+                rptProjectSummary.DataBind();
+
+                hdnRowCount.Value = dt.Rows.Count.ToString();
+            }
+
+
 
             //Control footerTemplate = rptProjectSummary.Controls[rptProjectSummary.Controls.Count - 1].Controls[0];
             //Label lblFooter = footerTemplate.FindControl("lblTotal") as Label;
@@ -163,7 +187,7 @@ namespace ProjectManagement.Report
         /// <param name="e"></param>
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
-            
+
             DataTable dt = GetProjectTable();
             dt.TableName = "Project";
 
@@ -184,8 +208,10 @@ namespace ProjectManagement.Report
 
             //dt.Rows.Add(dr);
 
-            string reportHeader = "Project Report - " + ReportType + " - from " + FromDate + " to " + ToDate;
-            string fileName = "Project_Report_-_" + ReportType + "_-_from_" + FromDate + "_to_" + ToDate;
+            string reportHeader = ddlReportType.SelectedIndex.Equals(1) ? "(Check-in Summary) Project Report - " + ReportType + " - from " + FromDate + " to " + ToDate
+                                                                        : "Project Report - " + ReportType + " - from " + FromDate + " to " + ToDate;
+            string fileName = ddlReportType.SelectedIndex.Equals(1) ? "Check-in_Summary_Project_Report_-_" + ReportType + "_-_from_" + FromDate + "_to_" + ToDate
+                                                                    : "Project_Report_-_" + ReportType + "_-_from_" + FromDate + "_to_" + ToDate;
 
             FileExport fileExport = new FileExport(this.Response);
             fileExport.ExcelExport2(dt, fileName, reportHeader);
@@ -218,7 +244,7 @@ namespace ProjectManagement.Report
 
             Int32.TryParse(ddlPIStatus.SelectedValue, out piStatusId);
 
-            int phdId = 0, msId = 0, healthValue = 0, grantValue = 0, isProject = 1, isBiostat = -1, creditTo = -1,
+            int phdId = 0, msId = 0, healthValue = 0, grantValue = 0, isProject = 1, isBiostat = 1, creditTo = 1,
                 isRmatrixRequest = 0, isOlaRequest = 0, submitRMATRIX = 1, submitOlaHAWAII = 1, letterOfSupport = 0;
 
             Int32.TryParse(ddlPhd.SelectedValue, out phdId);
@@ -239,26 +265,26 @@ namespace ProjectManagement.Report
 
             letterOfSupport = chkLetterOfSupport.Checked ? 1 : 0;
 
-            //if ((chkBiostat.Checked && chkBioinfo.Checked) || (!chkBiostat.Checked && !chkBioinfo.Checked))
-            //    isBiostat = -1;
-            //else
-            //{
-            //    isBiostat = chkBiostat.Checked ? 1 : 2;
-            //}
+            if ((chkBiostat.Checked && chkBioinfo.Checked) || (!chkBiostat.Checked && !chkBioinfo.Checked))
+                isBiostat = -1;
+            else
+            {
+                isBiostat = chkBiostat.Checked ? 1 : 2;
+            }
 
 
-            //if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
-            //    creditTo = -1;
-            //else
-            //{
-            //    creditTo = chkCreditToBoth.Checked ? 3 : chkCreditToBioinfo.Checked ? 2 : 1;
-            //}
+            if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
+                creditTo = -1;
+            else
+            {
+                creditTo = chkCreditToBoth.Checked ? 3 : chkCreditToBioinfo.Checked ? 2 : 1;
+            }
 
             DateTime fromDate = DateTime.TryParse(txtFromDate.Text, out fromDate) ? DateTime.Parse(txtFromDate.Text)
                                                                                   : new DateTime(2000, 01, 01);
             DateTime toDate = DateTime.TryParse(txtToDate.Text, out toDate) ? DateTime.Parse(txtToDate.Text)
                                                                             : DateTime.Now;/*DateTime(2099, 01, 01)*/
-                                                                                                     
+
 
             //DateTime fromDate = new DateTime(2000,01,01), toDate = new DateTime(2099,01,01);
             //if (DateTime.TryParse(txtFromDate.Text, out fromDate) && DateTime.TryParse(txtToDate.Text, out toDate))
@@ -293,20 +319,24 @@ namespace ProjectManagement.Report
         /// <param name="healthValue">Health Database specified.</param>
         /// <param name="grantValue">Funding Source specified.</param>
         /// <returns></returns>
-        private DataTable GetProjectTable(DateTime fromDate, DateTime toDate, int phdId, int msId, int isProject, int isBiostat, 
+        private DataTable GetProjectTable(DateTime fromDate, DateTime toDate, int phdId, int msId, int isProject, int isBiostat,
             int isRmatrixRequest, int isOlaRequest, int submitRMATRIX, int submitOlaHAWAII, int letterOfSupport, int creditTo, int piId, int piStatusId, int affilId, int healthValue, int grantValue)
         {
             DataTable dt = new DataTable("tblProject");
 
+            string reportToUse = ddlReportType.SelectedIndex.Equals(1) ? "Rpt_Project_Summary2b" : "Rpt_Project_Summary2a";
+
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             SqlConnection con = new SqlConnection(constr);
+
 
             try
             {
 
+
                 using (SqlConnection sqlcon = new SqlConnection(constr))
                 {
-                    using (SqlCommand cmd = new SqlCommand("Rpt_Project_Summary2a", sqlcon))
+                    using (SqlCommand cmd = new SqlCommand(reportToUse, sqlcon))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@FromDate", fromDate);
