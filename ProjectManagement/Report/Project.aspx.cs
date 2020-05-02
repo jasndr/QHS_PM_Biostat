@@ -46,6 +46,7 @@ namespace ProjectManagement.Report
     ///                                    that doesn't necessarily have the label "master" as biostat type.
     ///  2020APR27 - Jason Delos Reyes  -  Added customized "Check-in Summary" report for Project report to 
     ///                                    be able to better facilitate work-from-home check-in summary sessions.
+    ///  2020MAY01 - Jason Delos Reyes  -  Fixed error in code that showed two reports instead of one selected.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -140,6 +141,7 @@ namespace ProjectManagement.Report
             if (ddlReportType.SelectedIndex.Equals(1))
             {
                 divProject2.Visible = true;
+                divProject.Visible = false;
 
                 DataTable dt = GetProjectTable();
 
@@ -151,6 +153,7 @@ namespace ProjectManagement.Report
             else
             {
                 divProject.Visible = true;
+                divProject2.Visible = false;
 
                 DataTable dt = GetProjectTable();
 
