@@ -115,12 +115,12 @@
                                 </asp:DropDownList>
                             </div>
 
-                            <%--<div class="col-sm-1 offset1">
+                            <div class="col-sm-1 offset1">
                                 <asp:CheckBox ID="chkBiostat" runat="server" Text="Biostat"></asp:CheckBox>
                             </div>
                             <div class="col-sm-1 offset1">
                                 <asp:CheckBox ID="chkBioinfo" runat="server" Text="Bioinfo"></asp:CheckBox>
-                            </div>--%>
+                            </div>
                         </div>
                         <br />
                         <div class="row">
@@ -481,7 +481,7 @@
                             </div>
                         </div>
                         <br />
-                        <%--<h5>Credit To</h5>
+                        <h5>Credit To</h5>
                         <div class="row">
                             <div class="col-sm-6 text-left">
                                 <label class="control-label">Credit to sister cores</label>
@@ -497,7 +497,7 @@
                             <div class="col-sm-2">
                                 <asp:CheckBox ID="chkCreditToBoth" runat="server" Text="Biostat and Bioinfo"></asp:CheckBox>
                             </div>
-                        </div>--%>
+                        </div>
 
                         <h5>Other Description</h5>
                         <br />
@@ -1318,21 +1318,29 @@
 
             });
 
-            // Makes "RMATRIX" and "Ola Hawaii" checkboxes checked by default
-            // if there is no ID already tied to the project form.
+            // If there is no ID already tied to the project form:
             var projectId = $("#MainContent_lblProjectId").text();
             if (projectId == null || projectId == 0) {
+                // (1) Makes "Ola Hawaii" checkbox checked by default in Acknowledgement section.
                 $('#tblAkn').find('td').each(function () {
                     var _aknCheckBox = $(this).find(":input[name$='chkId']"),
                         //_aknBitValue = $(this).find(":input[name$='BitValue']").val(),
                         _aknName = $(this).eq(0).text().trim();
 
-                    if (_aknName == 'RMATRIX' || _aknName == 'Ola Hawaii') {
+                    if (/*_aknName == 'RMATRIX' || */_aknName == 'Ola HAWAII' || _aknName == 'Submit to Ola HAWAII'
+                                                                              || _aknName == 'Submit to RMATRIX') {
                         _aknCheckBox.prop("checked", true);
                     }
 
 
                 });
+
+                // (2) Makes "Submit to Ola HAWAII" and "Submit to RMATRIX" checkboxes checked by default
+                //     in Admin section.
+                $('#MainContent_chkReportToRmatrix').prop('checked', true);
+                $('#MainContent_chkReportToOlaHawaii').prop('checked', true);
+
+                
             }
 
 

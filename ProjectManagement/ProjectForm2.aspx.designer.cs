@@ -60,6 +60,24 @@ namespace ProjectManagement
         protected global::System.Web.UI.WebControls.DropDownList ddlProject;
 
         /// <summary>
+        /// chkBiostat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkBiostat;
+
+        /// <summary>
+        /// chkBioinfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkBioinfo;
+
+        /// <summary>
         /// txtTitle control.
         /// </summary>
         /// <remarks>
@@ -319,6 +337,33 @@ namespace ProjectManagement
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtServiceBitSum;
+
+        /// <summary>
+        /// chkCreditToBiostat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkCreditToBiostat;
+
+        /// <summary>
+        /// chkCreditToBioinfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkCreditToBioinfo;
+
+        /// <summary>
+        /// chkCreditToBoth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkCreditToBoth;
 
         /// <summary>
         /// chkJuniorPIYes control.

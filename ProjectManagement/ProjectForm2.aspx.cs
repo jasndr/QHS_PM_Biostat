@@ -119,10 +119,8 @@ namespace ProjectManagement
     ///                                    to correspond to this change.
     ///  2019SEP10 - Jason Delos Reyes  -  Fixed "Year/Call/Wave" display issue not separating upon reading from database.
     ///  2019NOV13 - Jason Delos Reyes  -  Fixed "Year/Call/Wave" box appearing despite Ola HAWAII Request Type (Pilot, R21, R01, Other) not selected.
-    ///  2019DEC03 - Jason Delos Reyes  -  Removed "project type" and "credit to" as it is no longer required for individual core facility.
-    ///  2019DEC05 - Jason Delos Reyes  -  Made project form to be able to view projects that formerly had a Bioinformatics lead
-    ///                                    statistician as they were deleted and previously recorded an error message due to missing
-    ///                                    leadbiostatid value.
+    ///  2020MAY07 - Jason Delos Reyes  -  Made "Acknowledgement" section check only "Ola HAWAII" by default. Also fixed default
+    ///                                    checking of "Submit to RMATRIX" and "Submit to Ola HAWAII" to see default setting.
     /// </summary>
     public partial class ProjectForm2 : System.Web.UI.Page
     {
@@ -140,7 +138,7 @@ namespace ProjectManagement
             if (!Page.IsPostBack)
             {
                 BindControl();
-                
+
 
                 int id = 0;
                 Int32.TryParse(projectId, out id);
@@ -155,10 +153,10 @@ namespace ProjectManagement
                     tabAdmin.Style["display"] = "none";
                 }
             }
-            
-             // Display linked grant(s) to the project.
-             BindGridViewGrant();
-            
+
+            // Display linked grant(s) to the project.
+            BindGridViewGrant();
+
         }
 
         /// <summary>
@@ -319,11 +317,11 @@ namespace ProjectManagement
                             var leadBiostatUserName = db.BioStats.FirstOrDefault(b => b.Id == leadBiostatId).LogonId;
                             var leadBiostatEmail = db.BioStats.FirstOrDefault(b => b.Id == leadBiostatId).Email;
 
-                            string otherMembersUserName = "", otherMembersEmail = "", userName = "", emailSendTo = ""; 
+                            string otherMembersUserName = "", otherMembersEmail = "", userName = "", emailSendTo = "";
 
-                           // Removed sending to project creator (since most likely project members and/or tracking team).
-                           //var emailToSend = db.BioStats.FirstOrDefault(b => b.Id == leadBiostatId).Email;
-                           // var emailToSend = db.BioStats.FirstOrDefault(b => b.LogonId == prevProject.Creator).Email;
+                            // Removed sending to project creator (since most likely project members and/or tracking team).
+                            //var emailToSend = db.BioStats.FirstOrDefault(b => b.Id == leadBiostatId).Email;
+                            // var emailToSend = db.BioStats.FirstOrDefault(b => b.LogonId == prevProject.Creator).Email;
 
                             //var userName = db.BioStats.FirstOrDefault(b => b.Id == leadBiostatId).LogonId;
                             //var userName = db.BioStats.FirstOrDefault(b => b.LogonId == prevProject.Creator).LogonId;
@@ -352,7 +350,7 @@ namespace ProjectManagement
                             //    emailToSend = emailToSend + "," + leadBiostatEmail;
                             //    userName = userName + ", " + leadBiostatUserName;
                             //}
-                            
+
 
                             // Combine all usernames and email addresses
                             userName = leadBiostatUserName + "," + otherMembersUserName;
@@ -569,15 +567,15 @@ namespace ProjectManagement
                 }
             }
 
-            //if (!chkBiostat.Checked && !chkBioinfo.Checked)
-            //{
-            //    validateResult.Append("Please indicate if this is a Biostat or Bioinfo project. \\n");
-            //}
+            if (!chkBiostat.Checked && !chkBioinfo.Checked)
+            {
+                validateResult.Append("Please indicate if this is a Biostat or Bioinfo project. \\n");
+            }
 
-            //if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
-            //{
-            //    validateResult.Append("Please indicate \"Credit To\" field. \\n");
-            //}
+            if (!chkCreditToBiostat.Checked && !chkCreditToBioinfo.Checked && !chkCreditToBoth.Checked)
+            {
+                validateResult.Append("Please indicate \"Credit To\" field. \\n");
+            }
 
             int grantBitSum = 0;
             Int32.TryParse(txtGrantBitSum.Value, out grantBitSum);
@@ -831,7 +829,7 @@ namespace ProjectManagement
             BindPhaseByProject(projectId);
         }
 
-        
+
 
         /// <summary>
         /// Populates project field based on which project information 
@@ -852,8 +850,7 @@ namespace ProjectManagement
             txtInitialDate.Text = project.InitialDate.ToShortDateString();
             txtDeadline.Text = project.DeadLine != null ? Convert.ToDateTime(project.DeadLine).ToShortDateString() : string.Empty;
 
-            ddlLeadBiostat.SelectedValue = project.LeadBiostatId > 0 ? (ddlLeadBiostat.Items.FindByValue(project.LeadBiostatId.ToString())
-                                                                        == null ? "" : project.LeadBiostatId.ToString()) : string.Empty;
+            ddlLeadBiostat.SelectedValue = project.LeadBiostatId > 0 ? project.LeadBiostatId.ToString() : string.Empty;
 
             //if (project.OtherMemberBitSum > 0)
             //{
@@ -1031,9 +1028,9 @@ namespace ProjectManagement
                 txtOlaHawaiiNum.Value = project.OlaHawaiiNum.ToString();
                 txtOlaHawaiiSubDate.Text = project.OlaHawaiiSubDate != null ? Convert.ToDateTime(project.OlaHawaiiSubDate).ToShortDateString() : string.Empty;
 
-               // chkRequestTypeRfunded.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.Rfunded;
-               // chkRequestTypePilotPI.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.PilotPI;
-               // chkRequestTypeOther.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.Other;
+                // chkRequestTypeRfunded.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.Rfunded;
+                // chkRequestTypePilotPI.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.PilotPI;
+                // chkRequestTypeOther.Checked = project.OlaHawaiiRequestType == (byte)OlaHawaiiRequestType.Other;
 
             }
             else
@@ -1098,12 +1095,12 @@ namespace ProjectManagement
             else
                 chkApproved.Disabled = false;
 
-            //chkBiostat.Checked = project.ProjectType == (byte)ProjectType.Biostat;
-            //chkBioinfo.Checked = project.ProjectType == (byte)ProjectType.Bioinfo;
+            chkBiostat.Checked = project.ProjectType == (byte)ProjectType.Biostat;
+            chkBioinfo.Checked = project.ProjectType == (byte)ProjectType.Bioinfo;
 
-            //chkCreditToBiostat.Checked = project.CreditTo == (byte)ProjectType.Biostat;
-            //chkCreditToBioinfo.Checked = project.CreditTo == (byte)ProjectType.Bioinfo;
-            //chkCreditToBoth.Checked = project.CreditTo == (byte)ProjectType.Both;
+            chkCreditToBiostat.Checked = project.CreditTo == (byte)ProjectType.Biostat;
+            chkCreditToBioinfo.Checked = project.CreditTo == (byte)ProjectType.Bioinfo;
+            chkCreditToBoth.Checked = project.CreditTo == (byte)ProjectType.Both;
         }
 
         /// <summary>
@@ -1719,8 +1716,8 @@ namespace ProjectManagement
                 IsApproved = chkApproved.Checked,
                 Creator = User.Identity.Name,
                 CreationDate = DateTime.Now,
-                //ProjectType = chkBiostat.Checked ? (byte)ProjectType.Biostat : chkBioinfo.Checked ? (byte)ProjectType.Bioinfo : (byte)0, // if biostat is checked, then biostat, otherwise bioinfo (or 0 if unchecked).
-                //CreditTo = chkCreditToBiostat.Checked ? (byte)ProjectType.Biostat : chkCreditToBioinfo.Checked ? (byte)ProjectType.Bioinfo : chkCreditToBoth.Checked ? (byte)ProjectType.Both : (byte)0 // if biostat is checked, then biostat; otherwise if bioinfo is checked, then bioinfo; otherwise if 'both', then both, otherwise nothing is checked (value of 0)
+                ProjectType = chkBiostat.Checked ? (byte)ProjectType.Biostat : chkBioinfo.Checked ? (byte)ProjectType.Bioinfo : (byte)0, // if biostat is checked, then biostat, otherwise bioinfo (or 0 if unchecked).
+                CreditTo = chkCreditToBiostat.Checked ? (byte)ProjectType.Biostat : chkCreditToBioinfo.Checked ? (byte)ProjectType.Bioinfo : chkCreditToBoth.Checked ? (byte)ProjectType.Both : (byte)0 // if biostat is checked, then biostat; otherwise if bioinfo is checked, then bioinfo; otherwise if 'both', then both, otherwise nothing is checked (value of 0)
             };
 
             return project;
@@ -2103,12 +2100,12 @@ namespace ProjectManagement
             using (ProjectTrackerContainer db = new ProjectTrackerContainer())
             {
                 int projectId = 0;
-                
+
                 Int32.TryParse(ddlProject.SelectedItem.Value, out projectId);
 
                 var query = db.ViewGrant2.Where(g => g.ProjectId == projectId);
 
-                foreach(var p in query.OrderByDescending(p => p.Id).ToList())
+                foreach (var p in query.OrderByDescending(p => p.Id).ToList())
                 {
                     DataRow row = dt.NewRow();
 
@@ -2125,11 +2122,11 @@ namespace ProjectManagement
             }
 
 
-                return dt;
+            return dt;
         }
 
 
-       // private DataTable
+        // private DataTable
 
 
         /// <summary>
@@ -2336,8 +2333,8 @@ namespace ProjectManagement
             body.AppendLine("<p></P>");
             body.AppendLine("<p>Aloha,</P>");
             body.AppendLine("<p></P>");
-            body.AppendLine(@"<p>Quantitative Health Sciences (QHS)<br />
-                                Department of Complementary & Integrative Medicine<br />
+            body.AppendLine(@"<p>Biostatistics Core Facility<br />
+                                Department of Quantitative Health Sciences (QHS)<br />
                                 University of Hawaii John A. Burns School of Medicine<br />
                                 651 Ilalo Street, Medical Education Building, Suite 411<br />
                                 Honolulu, HI 96813<br />
