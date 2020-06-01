@@ -46,7 +46,13 @@ namespace ProjectManagement.Report
     ///                                    that doesn't necessarily have the label "master" as biostat type.
     ///  2020APR27 - Jason Delos Reyes  -  Added customized "Check-in Summary" report for Project report to 
     ///                                    be able to better facilitate work-from-home check-in summary sessions.
-    ///  2020MAY01 - Jason Delos Reyes  -  Fixed error in code that showed two reports instead of one selected.
+    ///  2020MAY01 - Jason Delos Reyes  -  Need to fix error in code that shows two different reports in the same
+    ///                                    screen when it should be displaying just one.
+    ///  2020MAY29 - Jason Delos Reyes  -  Created Rpt_Project_Summary2c stored procedure to replace existing 
+    ///                                    Check-in Meeting Report. Need to update title on front-end to
+    ///                                    use faculty/staff name on report title for check-in meeting reports.
+    ///  2020JUN01 - Jason Delos Reyes  -  Edited report to allow individual MS or Phd name to be entered in 
+    ///                                    report title when selected.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -257,6 +263,9 @@ namespace ProjectManagement.Report
 
             if (healthValue > 0) ReportType = ReportType + " " + ddlHealthData.SelectedItem.Text;
             if (grantValue > 0) ReportType = ReportType + " " + ddlGrant.SelectedItem.Text;
+            if (phdId > 0) ReportType = ReportType + " " + ddlPhd.SelectedItem.Text;
+            if (msId > 0) ReportType = ReportType + " " + ddlMs.SelectedItem.Text;
+
 
             isProject = chkProject.Checked ? 1 : 0;
 
@@ -327,7 +336,7 @@ namespace ProjectManagement.Report
         {
             DataTable dt = new DataTable("tblProject");
 
-            string reportToUse = ddlReportType.SelectedIndex.Equals(1) ? "Rpt_Project_Summary2b" : "Rpt_Project_Summary2a";
+            string reportToUse = ddlReportType.SelectedIndex.Equals(1) ? "Rpt_Project_Summary2c" : "Rpt_Project_Summary2a";
 
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             SqlConnection con = new SqlConnection(constr);
