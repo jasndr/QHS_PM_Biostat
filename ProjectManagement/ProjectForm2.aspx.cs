@@ -121,6 +121,9 @@ namespace ProjectManagement
     ///  2019NOV13 - Jason Delos Reyes  -  Fixed "Year/Call/Wave" box appearing despite Ola HAWAII Request Type (Pilot, R21, R01, Other) not selected.
     ///  2020MAY07 - Jason Delos Reyes  -  Made "Acknowledgement" section check only "Ola HAWAII" by default. Also fixed default
     ///                                    checking of "Submit to RMATRIX" and "Submit to Ola HAWAII" to see default setting.
+    ///  2020JUN15 - Jason Delos Reyes  -  Remove potential for error message for old Bioinformatics projects that credit
+    ///                                    the Biostatistics Core (with Bioinformatics member no longer exisitng on this
+    ///                                    database).
     /// </summary>
     public partial class ProjectForm2 : System.Web.UI.Page
     {
@@ -850,7 +853,7 @@ namespace ProjectManagement
             txtInitialDate.Text = project.InitialDate.ToShortDateString();
             txtDeadline.Text = project.DeadLine != null ? Convert.ToDateTime(project.DeadLine).ToShortDateString() : string.Empty;
 
-            ddlLeadBiostat.SelectedValue = project.LeadBiostatId > 0 ? project.LeadBiostatId.ToString() : string.Empty;
+            ddlLeadBiostat.SelectedValue = project.LeadBiostatId > 0 ?  ddlLeadBiostat.Items.FindByValue(project.LeadBiostatId.ToString()) != null ? project.LeadBiostatId.ToString() : string.Empty : string.Empty;
 
             //if (project.OtherMemberBitSum > 0)
             //{
