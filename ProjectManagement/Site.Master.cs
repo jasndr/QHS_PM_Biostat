@@ -29,6 +29,8 @@ namespace ProjectManagement
     ///  2019APR26 - Jason Delos Reyes  -  Replace sole "RMATRIX Monthly Report" link to a more inclusive "RMATRIX / Ola HAWAII Monthly Report"
     ///                                    tab to allow pulling Ola HAWAII reports for now, and possibly expand to other grants in the future.
     ///  2019DEC03 - Jason Delos Reyes  -  Changed text to conform to Biostatistics Project Tracking separation.
+    ///  2020SEP18 - Jason Delos Reyes  -  Added ability for new User Role "GradStudent" to view "Forms" dropdown list on left
+    ///                                 -  -hand side menu.
     /// </summary>
     public partial class SiteMaster : MasterPage
     {
@@ -99,7 +101,7 @@ namespace ProjectManagement
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("Biostat"))
+            if (HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("Biostat") || HttpContext.Current.User.IsInRole("GradStudent"))
             {
                 //ClientLink.Visible = true;
                 PILink.Visible = true;
