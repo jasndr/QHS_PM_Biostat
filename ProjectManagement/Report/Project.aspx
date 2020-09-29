@@ -322,6 +322,8 @@
                                             <th class="col-sm-1">Lead</th>
                                             <th class="col-sm-1">Member</th>
                                             <th class="col-sm-1">Project Type</th>
+                                            <th class="col-sm-1">Phase</th>
+                                            <th class="col-sm-2">Assignment</th>
                                             <th>Hrs from last 2 weeks</th>
                                             <th>Reference Hours</th>
                                             <th>Cumulative Hours</th>
@@ -340,6 +342,8 @@
                                                     <td><%# Eval("LeadBio") %></td>
                                                     <td><%# Eval("Member") %></td>
                                                     <td><%# Eval("ProjectType") %></td>
+                                                    <td><%# Eval("Phase")%></td>
+                                                    <td><%# Eval("Assignment") %></td>
                                                     <td><%# Eval("Last2WeeksHrs") %></td>
                                                     <td><%# Eval("ReferenceHrs") %></td>
                                                     <td><%# Eval("CumulativeHrs") %></td>

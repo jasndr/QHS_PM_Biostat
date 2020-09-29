@@ -58,6 +58,8 @@ namespace ProjectManagement.Report
     ///                                    Short Term, Reference, and Cumulative Hours into the Check-in Reports.
     ///                                    Added optional "reference date" field on front end to accomodate 
     ///                                    additional date for report.
+    ///  2020SEP28 - Jason Delos Reyes  -  Created Rpt_Project_Summary2e stored procedure to allow separating
+    ///                                    Phase hours for internal projects.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
@@ -355,7 +357,7 @@ namespace ProjectManagement.Report
         {
             DataTable dt = new DataTable("tblProject");
 
-            string reportToUse = ddlReportType.SelectedIndex.Equals(1) ? "Rpt_Project_Summary2d" : "Rpt_Project_Summary2a";
+            string reportToUse = ddlReportType.SelectedIndex.Equals(1) ? "Rpt_Project_Summary2e" : "Rpt_Project_Summary2a";
 
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             SqlConnection con = new SqlConnection(constr);
