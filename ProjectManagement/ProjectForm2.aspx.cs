@@ -124,6 +124,7 @@ namespace ProjectManagement
     ///  2020JUN15 - Jason Delos Reyes  -  Remove potential for error message for old Bioinformatics projects that credit
     ///                                    the Biostatistics Core (with Bioinformatics member no longer exisitng on this
     ///                                    database).
+    ///  2020OCT21 - Jason Delos Reyes  -  Added GS (Graduate Student) phase estimate hours on Project Form.
     /// </summary>
     public partial class ProjectForm2 : System.Web.UI.Page
     {
@@ -391,6 +392,7 @@ namespace ProjectManagement
                                     phaseDB.Title = string.Empty;
                                     phaseDB.StartDate = null;
                                     phaseDB.CompletionDate = null;
+                                    phaseDB.GsHrs = null;
                                     phaseDB.MsHrs = null;
                                     phaseDB.PhdHrs = null;
                                     phaseDB.IsDeleted = true;
@@ -417,6 +419,7 @@ namespace ProjectManagement
                                 if (phaseInDB.StartDate != phase.StartDate
                                     || phaseInDB.CompletionDate != phase.CompletionDate
                                     || phaseInDB.Title != phase.Title
+                                    || phaseInDB.GsHrs != phase.GsHrs
                                     || phaseInDB.MsHrs != phase.MsHrs
                                     || phaseInDB.PhdHrs != phase.PhdHrs
                                     || phaseInDB.IsDeleted != phase.IsDeleted
@@ -425,6 +428,7 @@ namespace ProjectManagement
                                     phaseInDB.StartDate = phase.StartDate;
                                     phaseInDB.CompletionDate = phase.CompletionDate;
                                     phaseInDB.Title = phase.Title;
+                                    phaseInDB.GsHrs = phase.GsHrs;
                                     phaseInDB.MsHrs = phase.MsHrs;
                                     phaseInDB.PhdHrs = phase.PhdHrs;
                                     phaseInDB.IsDeleted = phase.IsDeleted;
@@ -1140,6 +1144,7 @@ namespace ProjectManagement
                     TextBox txtStartDate = row.FindControl("txtStartDate") as TextBox;
                     TextBox txtCompletionDate = row.FindControl("txtCompletionDate") as TextBox;
                     TextBox txtTitle = row.FindControl("txtTitle") as TextBox;
+                    TextBox txtGsHrs = row.FindControl("txtGsHrs") as TextBox;
                     TextBox txtMsHrs = row.FindControl("txtMsHrs") as TextBox;
                     TextBox txtPhdHrs = row.FindControl("txtPhdHrs") as TextBox;
                     Label agmtId = row.FindControl("lblAgmtId") as Label;
@@ -1148,6 +1153,7 @@ namespace ProjectManagement
                     dr["Id"] = lblId.Text;
                     dr["Name"] = lblPhase.Text;
                     dr["Title"] = txtTitle.Text;
+                    dr["GsHrs"] = txtGsHrs.Text;
                     dr["MsHrs"] = txtMsHrs.Text;
                     dr["PhdHrs"] = txtPhdHrs.Text;
                     dr["StartDate"] = txtStartDate.Text;
@@ -1299,6 +1305,7 @@ namespace ProjectManagement
             dt.Columns.Add("Id");
             dt.Columns.Add("Name");
             dt.Columns.Add("Title");
+            dt.Columns.Add("GsHrs");
             dt.Columns.Add("MsHrs");
             dt.Columns.Add("PhdHrs");
             dt.Columns.Add("StartDate");
@@ -1322,6 +1329,7 @@ namespace ProjectManagement
                         {
                             Name = "Phase-0",
                             Title = "Consultation",
+                            GsHrs = 1.0m,
                             MsHrs = 1.0m,
                             PhdHrs = 1.0m
                         };
@@ -1337,11 +1345,12 @@ namespace ProjectManagement
                         dr[0] = phase.Id;
                         dr[1] = phase.Name;
                         dr[2] = phase.Title;
-                        dr[3] = phase.MsHrs;
-                        dr[4] = phase.PhdHrs;
-                        dr[5] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
-                        dr[6] = phase.CompletionDate != null ? Convert.ToDateTime(phase.CompletionDate).ToShortDateString() : "";
-                        dr[7] = agmt != null ? agmt.AgmtId : "";
+                        dr[3] = phase.GsHrs;
+                        dr[4] = phase.MsHrs;
+                        dr[5] = phase.PhdHrs;
+                        dr[6] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
+                        dr[7] = phase.CompletionDate != null ? Convert.ToDateTime(phase.CompletionDate).ToShortDateString() : "";
+                        dr[8] = agmt != null ? agmt.AgmtId : "";
 
                         //decimal dMsOut = 0.0m,
                         //        dPhdOut = 0.0m;
@@ -1742,13 +1751,14 @@ namespace ProjectManagement
                     Label lblId = row.FindControl("lblId") as Label;
                     Label lblPhase = row.FindControl("lblPhase") as Label;
                     TextBox txtTitle = row.FindControl("txtTitle") as TextBox;
+                    TextBox txtGsHrs = row.FindControl("txtGsHrs") as TextBox;
                     TextBox txtMsHrs = row.FindControl("txtMsHrs") as TextBox;
                     TextBox txtPhdHrs = row.FindControl("txtPhdHrs") as TextBox;
                     TextBox txtStartDate = row.FindControl("txtStartDate") as TextBox;
                     TextBox txtCompletionDate = row.FindControl("txtCompletionDate") as TextBox;
 
                     int output = 0;
-                    decimal dMsOutput = 0.0m, dPhdOutput = 0.0m;
+                    decimal dGsOutput = 0.0m, dMsOutput = 0.0m, dPhdOutput = 0.0m;
                     DateTime dtStart, dtEnd;
 
                     if (lblPhase != null)
@@ -1759,6 +1769,7 @@ namespace ProjectManagement
                             ProjectId = projectId,
                             Name = lblPhase.Text,
                             Title = txtTitle.Text,
+                            GsHrs = decimal.TryParse(txtGsHrs.Text, out dGsOutput) ? dGsOutput : default(decimal?), 
                             MsHrs = decimal.TryParse(txtMsHrs.Text, out dMsOutput) ? dMsOutput : default(decimal?),
                             PhdHrs = decimal.TryParse(txtPhdHrs.Text, out dPhdOutput) ? dPhdOutput : default(decimal?),
                             StartDate = DateTime.TryParse(txtStartDate.Text, out dtStart) ? dtStart : (DateTime?)null,
@@ -1935,7 +1946,7 @@ namespace ProjectManagement
 
                     if (surveyForm == null)
                     {
-                        decimal p = 0.0M, m = 0.0M;
+                        decimal p = 0.0M, m = 0.0M, g = 0.0M;
 
                         //ObjectParameter phdHours = new ObjectParameter("PhdHours", typeof(decimal));
                         //ObjectParameter msHours = new ObjectParameter("MSHours", typeof(decimal));
@@ -1977,6 +1988,7 @@ namespace ProjectManagement
                                 RequestDate = DateTime.Now,
                                 PhdHours = p,
                                 MsHours = m,
+                                GsHours = g,
                                 ProjectInitialDate = project.InitialDate,
                                 ProjectCompletionDate = project.ProjectCompletionDate,
                                 LeadBiostat = string.IsNullOrEmpty(sb.ToString()) ? sb.ToString() : sb.ToString().Substring(0, sb.Length - 2),

@@ -212,5 +212,26 @@ namespace ProjectManagement
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<P_INVOICE_HOURS2a_Result>("P_INVOICE_HOURS2a", collabCtrIdParameter, invoiceIdParameter, startDateParameter, endDateParameter, refreshParameter, removeZerosParameter);
         }
+    
+        public virtual int P_PROJECTPHASE_HOURS_2(Nullable<int> projectId, string phase, Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, ObjectParameter phdHours, ObjectParameter mSHours, ObjectParameter gSHours)
+        {
+            var projectIdParameter = projectId.HasValue ?
+                new ObjectParameter("ProjectId", projectId) :
+                new ObjectParameter("ProjectId", typeof(int));
+    
+            var phaseParameter = phase != null ?
+                new ObjectParameter("Phase", phase) :
+                new ObjectParameter("Phase", typeof(string));
+    
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("P_PROJECTPHASE_HOURS_2", projectIdParameter, phaseParameter, startDateParameter, endDateParameter, phdHours, mSHours, gSHours);
+        }
     }
 }

@@ -281,3 +281,7 @@ if it's not present, don't show loader */
     border: 2px solid #000;
     border-radius: 4px;
 } 
+
+.table{
+    word-wrap: break-word;
+}

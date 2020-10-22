@@ -117,6 +117,8 @@
                                                     <th>PhD spt</th>
                                                     <th>MS est</th>
                                                     <th>MS spt</th>
+                                                    <th class=".gsHide">GS est</th>
+                                                    <th class=".gsHide">GS spt</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -130,6 +132,8 @@
                                                             <td><%# Eval("PhdSpt", "{0:0.00}") %></td>
                                                             <td><%# Eval("MsHrs") %></td>
                                                             <td><%# Eval("MsSpt") %></td>
+                                                            <td class=".gsHide"><%# Eval("GsHrs") %></td>
+                                                            <td class=".gsHide"><%# Eval("GsSpt") %></td>
                                                         </tr>
                                                     </ItemTemplate>
                                                 </asp:Repeater>
@@ -696,6 +700,7 @@
 
     <script type="text/javascript"> 
         function pageLoad(sender, args) {
+
 
             // Display or hide Month/Year based on Time Entry Report type.
             var selectedValue = $('#<%= timeEntryReportType.ClientID %> input:checked');

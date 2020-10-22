@@ -30,6 +30,7 @@ namespace ProjectManagement
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
         public bool IsDeleted { get; set; }
+        public Nullable<decimal> GsHrs { get; set; }
     
         public virtual Project Projects { get; set; }
         public virtual ICollection<TimeEntry> TimeEntries { get; set; }

@@ -59,6 +59,7 @@ namespace ProjectManagement
     ///  2019JAN18 - Jason Delos Reyes  -  Restored rounding that was originally fixed in 2019JAN09.  An page view error
     ///                                    appeared during publish. Will need to revisit issue.
     ///  2019JUN25 - Jason Delos Reyes  -  Made Time Entry view page only display *current* QHS faculty/staff.
+    ///  2020OCT21 - Jason Delos Reyes  -  Added GS (Grad Student) hours for Time Entry page.
     /// </summary>
     public partial class TimeEntry1 : System.Web.UI.Page
     {
@@ -319,8 +320,8 @@ namespace ProjectManagement
                         JObject jo = ja.Children<JObject>().FirstOrDefault(o => o["Name"].ToString() == phase);
                         if (jo != null && biostat != null)
                         {
-                            var hours = biostat.Type == "phd" ? "PhdHrs" : "MsHrs";
-                            var spent = biostat.Type == "phd" ? "PhdSpt" : "MsSpt";
+                            var hours = biostat.Type == "phd" ? "PhdHrs" : biostat.Type == "gs" ? "GsHrs" : "MsHrs";
+                            var spent = biostat.Type == "phd" ? "PhdSpt" : biostat.Type == "gs" ? "GsSpt" : "MsSpt";
                             
                             if (decimal.TryParse(jo[hours].ToString(), out dh) &&
                                 decimal.TryParse(jo[spent].ToString(), out ds))
@@ -667,8 +668,10 @@ namespace ProjectManagement
             dt.Columns.Add("StartDate");
             dt.Columns.Add("PhdHrs");
             dt.Columns.Add("MsHrs");
+            dt.Columns.Add("GsHrs");
             dt.Columns.Add("PhdSpt");
             dt.Columns.Add("MsSpt");
+            dt.Columns.Add("GsSpt");
 
             if (projectId > 0)
             {
@@ -691,16 +694,18 @@ namespace ProjectManagement
                         dr[2] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
                         dr[3] = phase.PhdHrs;
                         dr[4] = phase.MsHrs;
+                        dr[5] = phase.GsHrs;
 
                         //total spent hours
-                        decimal p = 0.5m, m = 0.5m;
+                        decimal p = 0.5m, m = 0.5m, g = 0.5m;
                         DateTime startDate = new DateTime(2000, 1, 1), endDate = new DateTime(2099, 1, 1);
                         //ObjectParameter startDate = new ObjectParameter("StartDate", typeof(DateTime?));
                         //ObjectParameter endDate = new ObjectParameter("EndDate", typeof(DateTime?));
                         ObjectParameter phdHours = new ObjectParameter("PhdHours", /*7.3*/typeof(decimal));
                         ObjectParameter msHours = new ObjectParameter("MSHours", /*7.3*/typeof(decimal));
+                        ObjectParameter gsHours = new ObjectParameter("GSHours", /*7.3*/typeof(decimal));
                         
-                        var i = context.P_PROJECTPHASE_HOURS(projectId, phase.Name, startDate, endDate, phdHours, msHours);
+                        var i = context.P_PROJECTPHASE_HOURS_2(projectId, phase.Name, startDate, endDate, phdHours, msHours, gsHours);
                         context.SaveChanges();
 
                         //phdHours.Value = 0.76;
@@ -708,9 +713,11 @@ namespace ProjectManagement
 
                         Decimal.TryParse(phdHours.Value.ToString(), out p);
                         Decimal.TryParse(msHours.Value.ToString(), out m);
+                        Decimal.TryParse(gsHours.Value.ToString(), out g);
 
-                        dr[5] = p;
-                        dr[6] = m;
+                        dr[6] = p;
+                        dr[7] = m;
+                        dr[8] = g;
 
                         dt.Rows.Add(dr);
 
@@ -723,6 +730,14 @@ namespace ProjectManagement
                     //{
                     //    //rebind ddlProject
                     //}
+
+                    /* Remove GS est and spt hours IF not a "Dean's Office Support" project*/
+                    /*if (context.Project2.Where(g=>g.Id == projectId).FirstOrDefault().GrantBitSum && 2097152 == 2097152)
+                    {
+
+                    }*/
+
+
                 }
             }
 
@@ -736,8 +751,15 @@ namespace ProjectManagement
                 textAreaPhase.Value = JsonConvert.SerializeObject(dt); //.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
             }
 
+            
+            
+
+
             rptPhase.DataSource = dt;
             rptPhase.DataBind();
+
+            
+
         }
       
         [WebMethod]
@@ -1094,6 +1116,7 @@ namespace ProjectManagement
             dt.Columns.Add("Id");
             dt.Columns.Add("Name");
             dt.Columns.Add("Title");
+            dt.Columns.Add("GsHrs");
             dt.Columns.Add("MsHrs");
             dt.Columns.Add("PhdHrs");
             dt.Columns.Add("StartDate");
@@ -1109,10 +1132,11 @@ namespace ProjectManagement
                     dr[0] = phase.Id;
                     dr[1] = phase.Name;
                     dr[2] = phase.Title;
-                    dr[3] = phase.MsHrs;
-                    dr[4] = phase.PhdHrs;
-                    dr[5] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
-                    //dr[6] = phase.TimeEntries.se
+                    dr[3] = phase.GsHrs;
+                    dr[4] = phase.MsHrs;
+                    dr[5] = phase.PhdHrs;
+                    dr[6] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
+                    //dr[7] = phase.TimeEntries.se
 
                     dt.Rows.Add(dr);
                 }
@@ -1374,7 +1398,7 @@ namespace ProjectManagement
             string userName = "";//Page.User.Identity.Name;
             string currUserType = "";
             decimal hoursInProject = 0;
-            decimal p = 0.5m, m = 0.5m;
+            decimal p = 0.5m, m = 0.5m, g = 0.5m;
             decimal estimatedHours = 0;
 
             using (ProjectTrackerContainer db = new ProjectTrackerContainer())
@@ -1390,19 +1414,22 @@ namespace ProjectManagement
                 DateTime startDate = new DateTime(2000, 1, 1), endDate = new DateTime(2099, 1, 1);
                 ObjectParameter phdHours = new ObjectParameter("PhdHours", typeof(decimal));
                 ObjectParameter msHours = new ObjectParameter("MSHours", typeof(decimal));
-                var i = db.P_PROJECTPHASE_HOURS(projectId, currPhase, startDate, endDate, phdHours, msHours);
+                ObjectParameter gsHours = new ObjectParameter("GSHours", typeof(decimal));
+                var i = db.P_PROJECTPHASE_HOURS_2(projectId, currPhase, startDate, endDate, phdHours, msHours, gsHours);
                 Decimal.TryParse(phdHours.Value.ToString(), out p);
                 Decimal.TryParse(msHours.Value.ToString(), out m);
+                Decimal.TryParse(gsHours.Value.ToString(), out g);
 
-                hoursInProject = currUserType == "phd" ? p : m;
+                hoursInProject = currUserType == "phd" ? p : currUserType == "gs" ? g : m;
 
                 // get estimated hours for current user - estimatedHours
                 var currentProj = db.ProjectPhase
                     .Where(x => x.ProjectId == projectId && x.Name == currPhase).FirstOrDefault();
                 decimal phdHrs = currentProj == null ? -1 : currentProj.PhdHrs != null ? (decimal)currentProj.PhdHrs : -1;
                 decimal msHrs = currentProj == null ? -1 : currentProj.MsHrs != null ? (decimal)currentProj.MsHrs : -1;
+                decimal gsHrs = currentProj == null ? -1 : currentProj.GsHrs != null ? (decimal)currentProj.GsHrs : -1;
 
-                estimatedHours = currUserType == "phd" ? phdHrs : msHrs;
+                estimatedHours = currUserType == "phd" ? phdHrs : currUserType == "gs" ? gsHrs : msHrs;
 
             }
 

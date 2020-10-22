@@ -36,6 +36,7 @@ namespace ProjectManagement
         public string Comment { get; set; }
         public Nullable<bool> Recommend { get; set; }
         public int RequestCount { get; set; }
+        public Nullable<decimal> GsHours { get; set; }
     
         public virtual Survey Survey { get; set; }
         public virtual ICollection<SurveyFormAnswer> SurveyFormAnswers { get; set; }
