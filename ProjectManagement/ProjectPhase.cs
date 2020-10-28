@@ -23,17 +23,15 @@ namespace ProjectManagement
         public int ProjectId { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> CompletionDate { get; set; }
         public string Title { get; set; }
         public Nullable<decimal> MsHrs { get; set; }
         public Nullable<decimal> PhdHrs { get; set; }
         public string Creator { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public Nullable<System.DateTime> CompletionDate { get; set; }
         public bool IsDeleted { get; set; }
-        public Nullable<decimal> GsHrs { get; set; }
     
-        public virtual Project Projects { get; set; }
-        public virtual ICollection<TimeEntry> TimeEntries { get; set; }
         public virtual Project2 Project2 { get; set; }
+        public virtual ICollection<TimeEntry> TimeEntries { get; set; }
     }
 }

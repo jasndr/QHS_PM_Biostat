@@ -23,7 +23,6 @@ namespace ProjectManagement
             this.ProjectServiceDetails = new HashSet<ProjectServiceDetail>();
             this.ProjectInvoices = new HashSet<Invoice>();
             this.ClientRequest = new HashSet<ClientRequest>();
-            this.ProjectPhase = new HashSet<ProjectPhase>();
         }
     
         public int Id { get; set; }
@@ -68,7 +67,6 @@ namespace ProjectManagement
         public virtual ICollection<ProjectServiceDetail> ProjectServiceDetails { get; set; }
         public virtual ICollection<Invoice> ProjectInvoices { get; set; }
         public virtual ICollection<ClientRequest> ClientRequest { get; set; }
-        public virtual ICollection<ProjectPhase> ProjectPhase { get; set; }
         public virtual Invests Invests { get; set; }
     }
 }

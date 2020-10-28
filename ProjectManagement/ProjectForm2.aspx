@@ -885,14 +885,9 @@
                                                     <asp:TextBox ID="txtCompletionDate" runat="server" class="form-control" Text='<%# Eval("CompletionDate") %>'></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Title" HeaderStyle-Width="20%">
+                                            <asp:TemplateField HeaderText="Title" HeaderStyle-Width="30%">
                                                 <ItemTemplate>
                                                     <asp:TextBox ID="txtTitle" runat="server" class="form-control" Text='<%# Eval("Title") %>'></asp:TextBox>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="GS Hrs" HeaderStyle-Width="10%" ControlStyle-CssClass="gsHide">
-                                                <ItemTemplate>
-                                                    <asp:TextBox ID="txtGsHrs" runat="server" class="form-control gsHide" Text='<%# Eval("GsHrs") %>'></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Ms Hrs" HeaderStyle-Width="10%">

@@ -102,9 +102,6 @@
         <EntityTypeShape EntityType="ProjectTracker.Invoice1" Width="1.5" PointX="13.625" PointY="36.125" />
         <AssociationConnector Association="ProjectTracker.FK_ClientAgmt_CollabCtr" />
         <AssociationConnector Association="ProjectTracker.FK_Invoice_CollabCtr" />
-        <EntityTypeShape EntityType="ProjectTracker.ProjectPhase" Width="1.5" PointX="1.125" PointY="13.75" />
-        <AssociationConnector Association="ProjectTracker.FK_ProjecPhase_Project" />
-        <AssociationConnector Association="ProjectTracker.FK_TimeEntries_Phase" />
         <EntityTypeShape EntityType="ProjectTracker.vwBiostatTime" Width="1.5" PointX="10.375" PointY="6.75" />
         <EntityTypeShape EntityType="ProjectTracker.Academic" Width="2" PointX="24.375" PointY="8.375" />
         <EntityTypeShape EntityType="ProjectTracker.ProjectField" Width="1.5" PointX="2.625" PointY="27.25" />
@@ -118,7 +115,6 @@
         <EntityTypeShape EntityType="ProjectTracker.Project2" Width="1.5" PointX="5.125" PointY="27.375" />
         <AssociationConnector Association="ProjectTracker.FK_ClientAgmt_Project2" />
         <AssociationConnector Association="ProjectTracker.FK_Grants_Project" />
-        <AssociationConnector Association="ProjectTracker.FK_ProjecPhase_Project2" />
         <AssociationConnector Association="ProjectTracker.FK_ProjectPublication" />
         <AssociationConnector Association="ProjectTracker.FK_SurveyForm_Project" />
         <AssociationConnector Association="ProjectTracker.FK_UHGrantProject2" />
@@ -130,6 +126,9 @@
         <AssociationConnector Association="ProjectTracker.FK_InvestStatusInvest" />
         <AssociationConnector Association="ProjectTracker.FK_tblInvesttblProject" />
         <AssociationConnector Association="ProjectTracker.InvestJabsomAffil" />
+        <EntityTypeShape EntityType="ProjectTracker.ProjectPhase" Width="1.5" PointX="7.375" PointY="32.875" />
+        <AssociationConnector Association="ProjectTracker.FK_ProjecPhase_Project2" />
+        <AssociationConnector Association="ProjectTracker.FK_TimeEntries_Phase" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

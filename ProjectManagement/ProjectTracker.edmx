@@ -581,7 +581,6 @@
           <Property Name="Creator" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
-          <Property Name="GsHrs" Type="decimal" Precision="18" Scale="1" />
         </EntityType>
         <EntityType Name="Projects">
           <Key>
@@ -2461,15 +2460,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
             <End Role="CollabCtr" EntitySet="CollabCtr" />
             <End Role="Invoice1" EntitySet="Invoice1Set" />
           </AssociationSet>
-          <EntitySet Name="ProjectPhase" EntityType="ProjectTracker.ProjectPhase" />
-          <AssociationSet Name="FK_ProjecPhase_Project" Association="ProjectTracker.FK_ProjecPhase_Project">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="ProjectPhase" EntitySet="ProjectPhase" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TimeEntries_Phase" Association="ProjectTracker.FK_TimeEntries_Phase">
-            <End Role="ProjectPhase" EntitySet="ProjectPhase" />
-            <End Role="TimeEntry" EntitySet="TimeEntries" />
-          </AssociationSet>
           <FunctionImport Name="P_PROJECTPHASE_HOURS">
             <Parameter Name="ProjectId" Mode="In" Type="Int32" />
             <Parameter Name="Phase" Mode="In" Type="String" />
@@ -2525,10 +2515,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
             <End Role="Project2" EntitySet="Project2" />
             <End Role="Grant" EntitySet="Grants" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProjecPhase_Project2" Association="ProjectTracker.FK_ProjecPhase_Project2">
-            <End Role="Project2" EntitySet="Project2" />
-            <End Role="ProjectPhase" EntitySet="ProjectPhase" />
-          </AssociationSet>
           <AssociationSet Name="FK_ProjectPublication" Association="ProjectTracker.FK_ProjectPublication">
             <End Role="Project2" EntitySet="Project2" />
             <End Role="Publication" EntitySet="Publications" />
@@ -2576,6 +2562,15 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
             <Parameter Name="MSHours" Mode="InOut" Type="Decimal" />
             <Parameter Name="GSHours" Mode="InOut" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="ProjectPhase" EntityType="ProjectTracker.ProjectPhase" />
+          <AssociationSet Name="FK_ProjecPhase_Project2" Association="ProjectTracker.FK_ProjecPhase_Project2">
+            <End Role="Project2" EntitySet="Project2" />
+            <End Role="ProjectPhase" EntitySet="ProjectPhase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TimeEntries_Phase" Association="ProjectTracker.FK_TimeEntries_Phase">
+            <End Role="ProjectPhase" EntitySet="ProjectPhase" />
+            <End Role="TimeEntry" EntitySet="TimeEntries" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Project">
           <Key>
@@ -2622,7 +2617,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
           <Property Name="RmatrixRcvDate" Type="DateTime" Precision="3" />
           <Property Name="NotReportRmatrix" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ClientRequest" Relationship="ProjectTracker.FK_ClientRequest_Projects" FromRole="Project" ToRole="ClientRequest" />
-          <NavigationProperty Name="ProjectPhase" Relationship="ProjectTracker.FK_ProjecPhase_Project" FromRole="Project" ToRole="ProjectPhase" />
           <NavigationProperty Name="Invests" Relationship="ProjectTracker.FK_tblInvesttblProject" FromRole="Project" ToRole="Invests" />
         </EntityType>
         <EntityType Name="InvestStatus">
@@ -3879,50 +3873,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ProjectPhase">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="MsHrs" Type="Decimal" Precision="18" Scale="1" />
-          <Property Name="PhdHrs" Type="Decimal" Precision="18" Scale="1" />
-          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Projects" Relationship="ProjectTracker.FK_ProjecPhase_Project" FromRole="ProjectPhase" ToRole="Project" />
-          <NavigationProperty Name="TimeEntries" Relationship="ProjectTracker.FK_TimeEntries_Phase" FromRole="ProjectPhase" ToRole="TimeEntry" />
-          <Property Name="CompletionDate" Type="DateTime" Precision="3" />
-          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Project2" Relationship="ProjectTracker.FK_ProjecPhase_Project2" FromRole="ProjectPhase" ToRole="Project2" />
-          <Property Name="GsHrs" Type="Decimal" Precision="18" Scale="1" />
-        </EntityType>
-        <Association Name="FK_ProjecPhase_Project">
-          <End Type="ProjectTracker.Project" Role="Project" Multiplicity="1" />
-          <End Type="ProjectTracker.ProjectPhase" Role="ProjectPhase" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Project">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProjectPhase">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TimeEntries_Phase">
-          <End Type="ProjectTracker.ProjectPhase" Role="ProjectPhase" Multiplicity="0..1" />
-          <End Type="ProjectTracker.TimeEntry" Role="TimeEntry" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProjectPhase">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TimeEntry">
-              <PropertyRef Name="PhaseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="vwBiostatTime">
           <Key>
             <PropertyRef Name="projectid" />
@@ -4255,7 +4205,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
           <Property Name="UHGrantID" Type="Int32" />
           <NavigationProperty Name="ClientAgmt" Relationship="ProjectTracker.FK_ClientAgmt_Project2" FromRole="Project2" ToRole="ClientAgmt" />
           <NavigationProperty Name="Grants" Relationship="ProjectTracker.FK_Grants_Project" FromRole="Project2" ToRole="Grant" />
-          <NavigationProperty Name="ProjectPhase" Relationship="ProjectTracker.FK_ProjecPhase_Project2" FromRole="Project2" ToRole="ProjectPhase" />
           <NavigationProperty Name="Publications" Relationship="ProjectTracker.FK_ProjectPublication" FromRole="Project2" ToRole="Publication" />
           <NavigationProperty Name="SurveyForm" Relationship="ProjectTracker.FK_SurveyForm_Project" FromRole="Project2" ToRole="SurveyForm" />
           <NavigationProperty Name="ProjectField" Relationship="ProjectTracker.FK_UHGrantProject2" FromRole="Project2" ToRole="ProjectField" />
@@ -4264,6 +4213,7 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
           <Property Name="OlaHIRequestType" Type="Byte" />
           <Property Name="OlaHIProjectType" Type="Byte" />
           <Property Name="OlaHIRequestYear" Type="Int32" />
+          <NavigationProperty Name="ProjectPhase" Relationship="ProjectTracker.FK_ProjecPhase_Project2" FromRole="Project2" ToRole="ProjectPhase" />
         </EntityType>
         <Association Name="FK_ClientAgmt_Project2">
           <End Type="ProjectTracker.Project2" Role="Project2" Multiplicity="1" />
@@ -4285,18 +4235,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Grant">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProjecPhase_Project2">
-          <End Type="ProjectTracker.Project2" Role="Project2" Multiplicity="1" />
-          <End Type="ProjectTracker.ProjectPhase" Role="ProjectPhase" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Project2">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProjectPhase">
               <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
@@ -4447,6 +4385,48 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
         <Association Name="InvestJabsomAffil">
           <End Type="ProjectTracker.Invests" Role="Invests" Multiplicity="*" />
           <End Type="ProjectTracker.JabsomAffil" Role="JabsomAffil" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ProjectPhase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="CompletionDate" Type="DateTime" Precision="3" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MsHrs" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="PhdHrs" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="Creator" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Project2" Relationship="ProjectTracker.FK_ProjecPhase_Project2" FromRole="ProjectPhase" ToRole="Project2" />
+          <NavigationProperty Name="TimeEntries" Relationship="ProjectTracker.FK_TimeEntries_Phase" FromRole="ProjectPhase" ToRole="TimeEntry" />
+        </EntityType>
+        <Association Name="FK_ProjecPhase_Project2">
+          <End Type="ProjectTracker.Project2" Role="Project2" Multiplicity="1" />
+          <End Type="ProjectTracker.ProjectPhase" Role="ProjectPhase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectPhase">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TimeEntries_Phase">
+          <End Type="ProjectTracker.ProjectPhase" Role="ProjectPhase" Multiplicity="0..1" />
+          <End Type="ProjectTracker.TimeEntry" Role="TimeEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectPhase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TimeEntry">
+              <PropertyRef Name="PhaseId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -5232,24 +5212,6 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProjectPhase">
-            <EntityTypeMapping TypeName="ProjectTracker.ProjectPhase">
-              <MappingFragment StoreEntitySet="ProjectPhase">
-                <ScalarProperty Name="GsHrs" ColumnName="GsHrs" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="PhdHrs" ColumnName="PhdHrs" />
-                <ScalarProperty Name="MsHrs" ColumnName="MsHrs" />
-                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="P_PROJECTPHASE_HOURS" FunctionName="ProjectTracker.Store.P_PROJECTPHASE_HOURS" />
           <EntitySetMapping Name="vwBiostatTime">
             <EntityTypeMapping TypeName="ProjectTracker.vwBiostatTime">
@@ -5596,6 +5558,23 @@ warning 6002: The table/view 'BioStatProject_DA.dbo.vwProjectBiostat' does not h
             </EndProperty>
           </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="P_PROJECTPHASE_HOURS_2" FunctionName="ProjectTracker.Store.P_PROJECTPHASE_HOURS_2" />
+          <EntitySetMapping Name="ProjectPhase">
+            <EntityTypeMapping TypeName="ProjectTracker.ProjectPhase">
+              <MappingFragment StoreEntitySet="ProjectPhase">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="PhdHrs" ColumnName="PhdHrs" />
+                <ScalarProperty Name="MsHrs" ColumnName="MsHrs" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

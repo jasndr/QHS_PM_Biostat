@@ -83,7 +83,6 @@ namespace ProjectManagement
         public virtual DbSet<ClientAgmt> ClientAgmt { get; set; }
         public virtual DbSet<CollabCtr> CollabCtr { get; set; }
         public virtual DbSet<Invoice1> Invoice1Set { get; set; }
-        public virtual DbSet<ProjectPhase> ProjectPhase { get; set; }
         public virtual DbSet<vwBiostatTime> vwBiostatTime { get; set; }
         public virtual DbSet<Academic> Academic { get; set; }
         public virtual DbSet<ProjectField> ProjectField { get; set; }
@@ -95,6 +94,7 @@ namespace ProjectManagement
         public virtual DbSet<Project2> Project2 { get; set; }
         public virtual DbSet<ViewGrant2> ViewGrant2 { get; set; }
         public virtual DbSet<Invests> Invests { get; set; }
+        public virtual DbSet<ProjectPhase> ProjectPhase { get; set; }
     
         public virtual int P_PROJECT_HOURS(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<int> projectId, ObjectParameter phdHours, ObjectParameter mSHours)
         {

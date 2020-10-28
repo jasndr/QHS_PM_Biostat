@@ -117,7 +117,6 @@
                                                     <th>PhD spt</th>
                                                     <th>MS est</th>
                                                     <th>MS spt</th>
-                                                    <th class=".gsHide">GS est</th>
                                                     <th class=".gsHide">GS spt</th>
                                                 </tr>
                                             </thead>
@@ -132,7 +131,6 @@
                                                             <td><%# Eval("PhdSpt", "{0:0.00}") %></td>
                                                             <td><%# Eval("MsHrs") %></td>
                                                             <td><%# Eval("MsSpt") %></td>
-                                                            <td class=".gsHide"><%# Eval("GsHrs") %></td>
                                                             <td class=".gsHide"><%# Eval("GsSpt") %></td>
                                                         </tr>
                                                     </ItemTemplate>

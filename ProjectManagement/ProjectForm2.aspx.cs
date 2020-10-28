@@ -392,7 +392,7 @@ namespace ProjectManagement
                                     phaseDB.Title = string.Empty;
                                     phaseDB.StartDate = null;
                                     phaseDB.CompletionDate = null;
-                                    phaseDB.GsHrs = null;
+                                   // phaseDB.GsHrs = null;
                                     phaseDB.MsHrs = null;
                                     phaseDB.PhdHrs = null;
                                     phaseDB.IsDeleted = true;
@@ -419,7 +419,7 @@ namespace ProjectManagement
                                 if (phaseInDB.StartDate != phase.StartDate
                                     || phaseInDB.CompletionDate != phase.CompletionDate
                                     || phaseInDB.Title != phase.Title
-                                    || phaseInDB.GsHrs != phase.GsHrs
+                                    //|| phaseInDB.GsHrs != phase.GsHrs
                                     || phaseInDB.MsHrs != phase.MsHrs
                                     || phaseInDB.PhdHrs != phase.PhdHrs
                                     || phaseInDB.IsDeleted != phase.IsDeleted
@@ -428,7 +428,7 @@ namespace ProjectManagement
                                     phaseInDB.StartDate = phase.StartDate;
                                     phaseInDB.CompletionDate = phase.CompletionDate;
                                     phaseInDB.Title = phase.Title;
-                                    phaseInDB.GsHrs = phase.GsHrs;
+                                  //  phaseInDB.GsHrs = phase.GsHrs;
                                     phaseInDB.MsHrs = phase.MsHrs;
                                     phaseInDB.PhdHrs = phase.PhdHrs;
                                     phaseInDB.IsDeleted = phase.IsDeleted;
@@ -1329,7 +1329,7 @@ namespace ProjectManagement
                         {
                             Name = "Phase-0",
                             Title = "Consultation",
-                            GsHrs = 1.0m,
+                           // GsHrs = 1.0m,
                             MsHrs = 1.0m,
                             PhdHrs = 1.0m
                         };
@@ -1345,7 +1345,7 @@ namespace ProjectManagement
                         dr[0] = phase.Id;
                         dr[1] = phase.Name;
                         dr[2] = phase.Title;
-                        dr[3] = phase.GsHrs;
+                       // dr[3] = phase.GsHrs;
                         dr[4] = phase.MsHrs;
                         dr[5] = phase.PhdHrs;
                         dr[6] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
@@ -1758,7 +1758,7 @@ namespace ProjectManagement
                     TextBox txtCompletionDate = row.FindControl("txtCompletionDate") as TextBox;
 
                     int output = 0;
-                    decimal dGsOutput = 0.0m, dMsOutput = 0.0m, dPhdOutput = 0.0m;
+                    decimal /*dGsOutput = 0.0m,*/ dMsOutput = 0.0m, dPhdOutput = 0.0m;
                     DateTime dtStart, dtEnd;
 
                     if (lblPhase != null)
@@ -1769,7 +1769,7 @@ namespace ProjectManagement
                             ProjectId = projectId,
                             Name = lblPhase.Text,
                             Title = txtTitle.Text,
-                            GsHrs = decimal.TryParse(txtGsHrs.Text, out dGsOutput) ? dGsOutput : default(decimal?), 
+                         //   GsHrs = decimal.TryParse(txtGsHrs.Text, out dGsOutput) ? dGsOutput : default(decimal?), 
                             MsHrs = decimal.TryParse(txtMsHrs.Text, out dMsOutput) ? dMsOutput : default(decimal?),
                             PhdHrs = decimal.TryParse(txtPhdHrs.Text, out dPhdOutput) ? dPhdOutput : default(decimal?),
                             StartDate = DateTime.TryParse(txtStartDate.Text, out dtStart) ? dtStart : (DateTime?)null,

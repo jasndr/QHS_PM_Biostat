@@ -1518,8 +1518,8 @@ namespace ProjectManagement
             //BindGridViewInvoice(project.Id);
             BindInvoiceDetails(project.Id, DetailsViewMode.ReadOnly);
 
-            BindgvPhase(project.ProjectPhase, true);
-            BindrptPhaseCompletion(project.ProjectPhase, true);
+            //BindgvPhase(project.ProjectPhase, true);
+            //BindrptPhaseCompletion(project.ProjectPhase, true);
         }
 
         private void BindrptPhaseCompletion(ICollection<ProjectPhase> collection, bool hasRow)

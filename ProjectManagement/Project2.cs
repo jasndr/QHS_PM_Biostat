@@ -18,9 +18,9 @@ namespace ProjectManagement
         {
             this.ClientAgmt = new HashSet<ClientAgmt>();
             this.Grants = new HashSet<Grant>();
-            this.ProjectPhase = new HashSet<ProjectPhase>();
             this.Publications = new HashSet<Publication>();
             this.SurveyForm = new HashSet<SurveyForm>();
+            this.ProjectPhase = new HashSet<ProjectPhase>();
         }
     
         public int Id { get; set; }
@@ -89,10 +89,10 @@ namespace ProjectManagement
     
         public virtual ICollection<ClientAgmt> ClientAgmt { get; set; }
         public virtual ICollection<Grant> Grants { get; set; }
-        public virtual ICollection<ProjectPhase> ProjectPhase { get; set; }
         public virtual ICollection<Publication> Publications { get; set; }
         public virtual ICollection<SurveyForm> SurveyForm { get; set; }
         public virtual ProjectField ProjectField { get; set; }
         public virtual Invests Invests { get; set; }
+        public virtual ICollection<ProjectPhase> ProjectPhase { get; set; }
     }
 }

@@ -694,7 +694,7 @@ namespace ProjectManagement
                         dr[2] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
                         dr[3] = phase.PhdHrs;
                         dr[4] = phase.MsHrs;
-                        dr[5] = phase.GsHrs;
+                        //dr[5] = phase.GsHrs;
 
                         //total spent hours
                         decimal p = 0.5m, m = 0.5m, g = 0.5m;
@@ -1132,7 +1132,7 @@ namespace ProjectManagement
                     dr[0] = phase.Id;
                     dr[1] = phase.Name;
                     dr[2] = phase.Title;
-                    dr[3] = phase.GsHrs;
+                    //dr[3] = phase.GsHrs;
                     dr[4] = phase.MsHrs;
                     dr[5] = phase.PhdHrs;
                     dr[6] = phase.StartDate != null ? Convert.ToDateTime(phase.StartDate).ToShortDateString() : "";
@@ -1427,9 +1427,9 @@ namespace ProjectManagement
                     .Where(x => x.ProjectId == projectId && x.Name == currPhase).FirstOrDefault();
                 decimal phdHrs = currentProj == null ? -1 : currentProj.PhdHrs != null ? (decimal)currentProj.PhdHrs : -1;
                 decimal msHrs = currentProj == null ? -1 : currentProj.MsHrs != null ? (decimal)currentProj.MsHrs : -1;
-                decimal gsHrs = currentProj == null ? -1 : currentProj.GsHrs != null ? (decimal)currentProj.GsHrs : -1;
+                //decimal gsHrs = currentProj == null ? -1 : currentProj.GsHrs != null ? (decimal)currentProj.GsHrs : -1;
 
-                estimatedHours = currUserType == "phd" ? phdHrs : currUserType == "gs" ? gsHrs : msHrs;
+                estimatedHours = currUserType == "phd" ? phdHrs : /*currUserType == "gs" ? gsHrs :*/ msHrs;
 
             }
 
