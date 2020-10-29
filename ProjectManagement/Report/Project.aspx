@@ -228,7 +228,7 @@
                                 <table id="headerTable" class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <th colspan="16">Project Report - <% =ReportType %> - from <% =FromDate %> to <% =ToDate %></th>
+                                            <th colspan="17">Project Report - <% =ReportType %> - from <% =FromDate %> to <% =ToDate %></th>
                                         </tr>
                                         <tr>
                                             <th class="col-sm-1">Id</th>
@@ -247,6 +247,7 @@
                                             <th>Grant</th>
                                             <th>Phd Hrs</th>
                                             <th>Ms Hrs</th>
+                                            <th>Gs Hrs</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -269,6 +270,7 @@
                                                     <td><%# Eval("GrantName") %></td>
                                                     <td><%# Eval("PhdHrs") %></td>
                                                     <td><%# Eval("MsHrs") %></td>
+                                                    <td><%# Eval("GsHrs") %></td>
                                                 </tr>
                                             </ItemTemplate>
                                             <FooterTemplate>

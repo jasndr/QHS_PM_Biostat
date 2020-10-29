@@ -60,6 +60,8 @@ namespace ProjectManagement.Report
     ///                                    additional date for report.
     ///  2020SEP28 - Jason Delos Reyes  -  Created Rpt_Project_Summary2e stored procedure to allow separating
     ///                                    Phase hours for internal projects.
+    ///  2020OCT28 - Jason Delos Reyes  -  Added GS Hours to Full Project Report to account for Graduate Student
+    ///                                    tracked hours.
     /// </summary>
     public partial class Project : System.Web.UI.Page
     {
