@@ -531,6 +531,7 @@
     <Content Include="Content\bootstrap-datepicker.css.map" />
     <None Include="Properties\PublishProfiles\DB_Biostat %28External%29.pubxml" />
     <None Include="Properties\PublishProfiles\DB_Biostat.pubxml" />
+    <None Include="Properties\PublishProfiles\DB_Biostat2.pubxml" />
     <None Include="Properties\PublishProfiles\DEV_Biostat.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

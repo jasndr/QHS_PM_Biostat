@@ -259,11 +259,12 @@
                     </p>
                     <br />
                     <p class="contentWords">
-                        Please review the <a href="https://qhs.jabsom.hawaii.edu/wp-content/uploads/sites/31/2019/06/20190507-Biostat-Core-Policies_Final.pdf" target="_blank" class="greenLink"><strong>Biostatistics Core Facility Policies</strong></a> <strong>prior</strong> to submitting this request.
+                        Please review the <a href="https://qhs.jabsom.hawaii.edu/_docs/2024-04-29-biostat-core-policies.pdf" target="_blank" class="greenLink"><strong>Biostatistics Core Facility Policies</strong></a> on our <a href="https://qhs.jabsom.hawaii.edu/" target="_blank" class="greenLink"><strong>website</strong></a> <strong>prior</strong> to submitting this request.
                     </p>
                     <br />
                     <p class="contentWords">
-                        If funding from <strong>Ola HAWAII</strong> will be used to support this request, please go <a href="https://redcap.jabsom.hawaii.edu/redcap/surveys/?s=8HD7K4EMWJ" class="greenLink"><strong>here</strong></a>. 
+                        If funding from any of the JABSOM Infrastructure Grants will be used to support this request, please go <a href="https://jabsom.hawaii.edu/research/infrastructure-grants/index.html" target="_blank" class="greenLink"><strong>https://jabsom.hawaii.edu/research/infrastructure-grants/index.html</strong></a> to navigate to the grant's 
+                        website to find more information on how to request for resources.
                     </p>
                     <br />
                     <p class="contentWords">
@@ -274,7 +275,8 @@
                         <li>You will be the first author of forthcoming publications related to this research project</li>
                     </ul>
                     <p class="contentWords">
-                        you can directly schedule a consultation appointment through the Biostatistics Core Facility <a href="https://qhs.jabsom.hawaii.edu/biostatistics-core/consulting/" class="greenLink"><strong>medical trainee consultation calendar </strong></a>
+                        you can directly schedule a consultation appointment through the Biostatistics Core Facility medical trainee consultation calendar 
+                        on our <a href="https://qhs.jabsom.hawaii.edu/" target="_blank" class="greenLink"><strong>website</strong></a>
                         (no need to submit a separate JABSOM Biostatistics Core Facility request form). 
                     </p>
                     <br />

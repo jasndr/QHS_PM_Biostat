@@ -29,7 +29,7 @@ namespace ProjectManagement
             // Credentials:
             var credentialUserName = "bqhspt@hawaii.edu";
             var sentFrom = "bqhspt@hawaii.edu";
-            var pwd2 = "fake password";
+            var pwd2 = "abcdefg";
 
             // Configure the client:
             System.Net.Mail.SmtpClient client =
